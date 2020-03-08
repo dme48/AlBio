@@ -79,3 +79,5 @@ inicia <- function(problema)
   source(paste("funciones/",problema,".R",sep=""))
   return(info)  
 }
+
+#Test
