@@ -52,7 +52,8 @@ genetico <- function(semilla=9876543,sizePopulation,numIteraciones=50,fichero="r
                                                           #en ausencia de otra información se inicializa con
                                                           #valores aleatorios entre l[j] y u[j], l[j]<=x[j]<=u[j]
   }
-  fitness <- evaluadora(poblacion)                        #evaluando la población. El fitness corresponde
+  ## Utilizamos el '-' para pasar de maximizacion a minimizacion
+  fitness <- - evaluadora(poblacion)                      #evaluando la población. El fitness corresponde
                                                           #con el valor de la función objetivo (los 
                                                           #problemas de la colección están puestos en forma 
                                                           #de máximo para directamente máximizar el fitness)
@@ -104,11 +105,10 @@ genetico <- function(semilla=9876543,sizePopulation,numIteraciones=50,fichero="r
    aux <- sort(fitness, decreasing = FALSE, index.return = TRUE)
    fitness <- aux$x
    index <- aux$ix
-   poblacion <- poblacion[indeces]
+   poblacion <- poblacion[index]
    ##Calculamos el CR de cada individuo
    ##CR es la probabilidad de que se hereden mutaciones en el "trial individual"
-   Rg <- 1
-   CR <- 1 - Rg / sizePoblacion
+   CR <- 1 - index / sizePoblacion
  }
 
 
