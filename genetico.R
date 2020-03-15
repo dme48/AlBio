@@ -18,7 +18,7 @@
 #semilla=9876543, tamaño de población igual a 100 individuos, probabilidad de mutación 0.1, 
 #probabilidad de recombinación 0.8, genera 50 poblaciones, guarda los resultados en el 
 #fichero 'result.txt' y aproxima el óptimo de la función 'Easom'
-genetico <- function(semilla=9876543,numIteraciones=50,fichero="result.txt",problema="Easom")
+genetico <- function(semilla=9876543,sizePopulation,numIteraciones=50,fichero="result.txt",problema="Easom")
   
 {
  
@@ -61,6 +61,10 @@ genetico <- function(semilla=9876543,numIteraciones=50,fichero="result.txt",prob
                                                           #llamada a la función genetico cuando (de esto se encargo
                                                           #la función 'inicia').
   
+  ##Inicializamos el SR a 0:
+  SR <- 0
+  ##Inicializamos F2 a 0.5
+  F2 <- 0.5
 
   ##numIter es "G" en el paper
  numIter<-0
@@ -71,27 +75,29 @@ genetico <- function(semilla=9876543,numIteraciones=50,fichero="result.txt",prob
                                                           #garantizar que el fitness sea positivo y además
                                                           #se reduce rango
     ##Toda esta parte nuestro paper lo hace diferente. Comentamos y cambiamos todo. 
-   indicePadres <- seleccionPadres(fitness-shift_,        #selección de padres para reproducción, devuelve 
-                                           sizePoblacion) #la lista de los índices de los padres seleccionados
-                                              
-   
-   variados <- poblacion[indicePadres,]                   #conjunto de padres a reproducir      
-   
-   variados <- recombinacion(variados,pr,l,u)             #recombinación de los padres seleccionados 
-   
-   variados <- mutacion(variados,pm,l,u,0.25)             #mutación de los padres ya recombinados
-   
-   fitnessVariados <- evaluadora(variados)                #cálculo del fitness de los nuevos hijos
-   
-   supervivientes <- seleccionSupervivientes(poblacion,   #selección de supervivientes que formarán
-                 variados,fitness,fitnessVariados,       #la próxima población, devuelve una lista
-                                      sizePoblacion,0.5)  #con los individuos seleccionados y su 
-                                                          #fitness
-   
-   poblacion <- supervivientes$pob                        #reasignando los individuos seleccionados
-   fitness <- supervivientes$fit                          #reasignando sus fitness 
-   rm(supervivientes)
+   #indicePadres <- seleccionPadres(fitness-shift_,        #selección de padres para reproducción, devuelve 
+   #                                        sizePoblacion) #la lista de los índices de los padres seleccionados
+   #                                           
+   #
+   #variados <- poblacion[indicePadres,]                   #conjunto de padres a reproducir      
+   #
+   #variados <- recombinacion(variados,pr,l,u)             #recombinación de los padres seleccionados 
+   #
+   #variados <- mutacion(variados,pm,l,u,0.25)             #mutación de los padres ya recombinados
+   #
+   #fitnessVariados <- evaluadora(variados)                #cálculo del fitness de los nuevos hijos
+   #
+   #supervivientes <- seleccionSupervivientes(poblacion,   #selección de supervivientes que formarán
+   #              variados,fitness,fitnessVariados,       #la próxima población, devuelve una lista
+   #                                   sizePoblacion,0.5)  #con los individuos seleccionados y su 
+   #                                                       #fitness
+   #
+   #poblacion <- supervivientes$pob                        #reasignando los individuos seleccionados
+   #fitness <- supervivientes$fit                          #reasignando sus fitness 
+   #rm(supervivientes)
    #cat(sprintf("Maximo FO =%f en iteracion %d\n",max(fitness),numIter))
+   ##Mutamos, generando una nueva generacion de individuos
+   mutados <- mutacion(poblacion)
  }
 
 
