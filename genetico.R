@@ -18,7 +18,7 @@
 #semilla=9876543, tamaño de población igual a 100 individuos, probabilidad de mutación 0.1, 
 #probabilidad de recombinación 0.8, genera 50 poblaciones, guarda los resultados en el 
 #fichero 'result.txt' y aproxima el óptimo de la función 'Easom'
-genetico <- function(semilla=9876543,sizePopulation,numIteraciones=50,fichero="result.txt",problema="Easom")
+genetico <- function(semilla=9876543,sizePoblacion,numIteraciones=50,fichero="result.txt",problema="Easom")
   
 {
  
@@ -97,8 +97,6 @@ genetico <- function(semilla=9876543,sizePopulation,numIteraciones=50,fichero="r
    #fitness <- supervivientes$fit                          #reasignando sus fitness 
    #rm(supervivientes)
    #cat(sprintf("Maximo FO =%f en iteracion %d\n",max(fitness),numIter))
-   ##Mutamos, generando una nueva generacion de individuos
-   mutados <- mutacion(poblacion)
    ##Calculamos fitness y ordenamos segun este.
    ##Utilizamos un '-' porque por defecto el programa maximiza (y queremos minimizar)
    fitness <- -evaluadora(poblacion)
@@ -106,6 +104,8 @@ genetico <- function(semilla=9876543,sizePopulation,numIteraciones=50,fichero="r
    fitness <- aux$x
    index <- aux$ix
    poblacion <- poblacion[index]
+   ##Mutamos, generando una nueva generacion de individuos
+   mutados <- mutacion(poblacion)
    ##Calculamos el CR de cada individuo
    ##CR es la probabilidad de que se hereden mutaciones en el "trial individual"
    CR <- 1 - index / sizePoblacion
@@ -113,6 +113,19 @@ genetico <- function(semilla=9876543,sizePopulation,numIteraciones=50,fichero="r
    bajos <- CR < 0.05
    CR[altos] <- 0.95
    CR[bajos] <- 0.05
+   ##Sustituimos aquellos individuos segun las condiciones del paper (ec. 10) 
+   dim <- length(poblacion[1])
+   if(dim == 1){
+      poblacion <- mutados
+   }
+   else{
+   if(dim == 1){
+       for(d in 1:dim){ 
+          rand_i <- sample(1:sizePoblacion, sizePoblacion, replace = TRUE)   
+          subs_flag <- runif(sizePoblacion) < CR[d]  |  c(1:sizePoblacion) != rand_i
+          poblacion[subs_flag] <- mutados[subs_flag]
+       }
+   } 
  }
 
 
@@ -125,6 +138,4 @@ genetico <- function(semilla=9876543,sizePopulation,numIteraciones=50,fichero="r
  cat(sprintf("Maximo FO =%f\n\n",max(fitness)))             #vfo alcanzado
  cat(sprintf("X(%d)= %8.6f ",1:length(l),poblacion[which.max(fitness),]))
  cat("\n\n")
- 
- 
 }
