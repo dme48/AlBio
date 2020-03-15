@@ -26,8 +26,7 @@ semilla <- c( 352668,  628434,  492990,  528643,  477348,  855426,  570702,  957
 #
 numRepeticiones <- 5  #cuantas veces se resuelve cada problema
 
-##Comentamos "sizePopulation", en el paper hace falta redefinirla a cada iteracion
-#sizePopulation <- 100 #tamaño de la población
+sizePopulation <- 100 #tamaño de la población ##NP en el paper
 numIteraciones <- 1000  #numero de iteraciones del algoritmo ## en el paper G_max
 
 ## pm y pr tienen equivalentes pero se redefinen en cada iteracion, las comentamos aqui
@@ -55,7 +54,7 @@ ficheroRes <- "resultados.txt"
 #con el que elaborar las estadisticas que se estimen oportunas
 for (i in problemas){
   for (j in 1:numRepeticiones){  
-   genetico(semilla[j],numIteraciones,ficheroRes,prob[i])
+   genetico(semilla[j], sizePopulation,numIteraciones,ficheroRes,prob[i])
   }
 }
 
