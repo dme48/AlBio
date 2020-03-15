@@ -98,6 +98,17 @@ genetico <- function(semilla=9876543,sizePopulation,numIteraciones=50,fichero="r
    #cat(sprintf("Maximo FO =%f en iteracion %d\n",max(fitness),numIter))
    ##Mutamos, generando una nueva generacion de individuos
    mutados <- mutacion(poblacion)
+   ##Calculamos fitness y ordenamos segun este.
+   ##Utilizamos un '-' porque por defecto el programa maximiza (y queremos minimizar)
+   fitness <- -evaluadora(poblacion)
+   aux <- sort(fitness, decreasing = FALSE, index.return = TRUE)
+   fitness <- aux$x
+   index <- aux$ix
+   poblacion <- poblacion[indeces]
+   ##Calculamos el CR de cada individuo
+   ##CR es la probabilidad de que se hereden mutaciones en el "trial individual"
+   Rg <- 1
+   CR <- 1 - Rg / sizePoblacion
  }
 
 
