@@ -109,6 +109,10 @@ genetico <- function(semilla=9876543,sizePopulation,numIteraciones=50,fichero="r
    ##Calculamos el CR de cada individuo
    ##CR es la probabilidad de que se hereden mutaciones en el "trial individual"
    CR <- 1 - index / sizePoblacion
+   altos <- CR > 0.95
+   bajos <- CR < 0.05
+   CR[altos] <- 0.95
+   CR[bajos] <- 0.05
  }
 
 
