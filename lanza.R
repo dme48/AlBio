@@ -25,11 +25,15 @@ semilla <- c( 352668,  628434,  492990,  528643,  477348,  855426,  570702,  957
 #Parametros de ejecucion, que deberan fijarse de acuerdo a vuestro experimento
 #
 numRepeticiones <- 5  #cuantas veces se resuelve cada problema
-sizePopulation <- 100 #tamaño de la población
-numIteraciones <- 1000  #numero de iteraciones del algoritmo (número de generaciones)
-pm <- -1.0            #probabilidad de mutación (si procede), si pm=-1, el programa asume como
-                      #pm 1/numero_de_variables 
-pr <- 0.8             #probabilidad de recombinación (si procede)
+
+##Comentamos "sizePopulation", en el paper hace falta redefinirla a cada iteracion
+#sizePopulation <- 100 #tamaño de la población
+numIteraciones <- 1000  #numero de iteraciones del algoritmo ## en el paper G_max
+
+## pm y pr tienen equivalentes pero se redefinen en cada iteracion, las comentamos aqui
+#pm <- -1.0            #probabilidad de mutación (si procede), si pm=-1, el programa asume como
+                       #pm 1/numero_de_variables 
+#pr <- 0.8             #probabilidad de recombinación (si procede)
 
 #Indicamos que problemas se van a resolver
 #Todos problemas <- 1:53
@@ -51,7 +55,7 @@ ficheroRes <- "resultados.txt"
 #con el que elaborar las estadisticas que se estimen oportunas
 for (i in problemas){
   for (j in 1:numRepeticiones){  
-   genetico(semilla[j],sizePopulation,pm,pr,numIteraciones,ficheroRes,prob[i])
+   genetico(semilla[j],numIteraciones,ficheroRes,prob[i])
   }
 }
 
