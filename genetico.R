@@ -7,9 +7,9 @@
 # semilla:           semilla utilizada para inicializar generadores de valores aleatorios,
 #                    de esta forma se pueden realizar las resoluciones de un mismo problema 
 #                    planteando las mismas condiciones iniciales o distintas condiciones iniciales.
-# sizePoblacion:     tamaño de la poblacion 
-# pm:                probabilidad de mutacion, si -1 se transforma en 1/n
-# pr:                probabiliad de recombinacion
+# sizePoblacion:     tamaño de la poblacion ##Eliminado
+# pm:                probabilidad de mutacion, si -1 se transforma en 1/n ##Eliminado
+# pr:                probabiliad de recombinacion ##Eliminado
 # numMaxIteraciones: numero de iteraciones (generaciones de poblaciones) a realizar
 # fichero:           nombre del fichero en el que se guardarán los resultados
 # problema:          nombre del problema a optimizar
@@ -18,8 +18,7 @@
 #semilla=9876543, tamaño de población igual a 100 individuos, probabilidad de mutación 0.1, 
 #probabilidad de recombinación 0.8, genera 50 poblaciones, guarda los resultados en el 
 #fichero 'result.txt' y aproxima el óptimo de la función 'Easom'
-genetico <- function(semilla=9876543,sizePoblacion=100,pm=0.1,pr=0.8,
-                                   numIteraciones=50,fichero="result.txt",problema="Easom")
+genetico <- function(semilla=9876543,numIteraciones=50,fichero="result.txt",problema="Easom")
   
 {
  
@@ -34,21 +33,20 @@ genetico <- function(semilla=9876543,sizePoblacion=100,pm=0.1,pr=0.8,
   u <- info$u;                                            #cotas superiores de las variables
   rm(info)                                                #borramos la lista info
   
-  if(pm==-1)   pm=1/sizeCromosoma                         #probabilidad de mutacion si pm=-1
-  
   set.seed(semilla)                                       #inicia generador de números aleatorios
   
   #Información general de la ejecucion, se muestra en la consola.
   cat(sprintf("Procesando problema: %s (%d)\n",problema,sizeCromosoma))
   cat(sprintf("Semilla: %d\n",semilla))
-  cat(sprintf("Tamano de Poblacion: %d\n",sizePoblacion))
+  #cat(sprintf("Tamano de Poblacion: %d\n",sizePoblacion))
   cat(sprintf("Numero iteraciones: %d\n",numIteraciones))
-  cat(sprintf("Probabilidad de mutación: %6.4f\n",pm))
-  cat(sprintf("Probabilidad de recombinación: %6.4f\n",pr))
+  #cat(sprintf("Probabilidad de mutación: %6.4f\n",pm))
+  #cat(sprintf("Probabilidad de recombinación: %6.4f\n",pr))
   t <- proc.time()                                       #Guardamos comienzo de ejecución
   fitness <- vector("numeric",sizePoblacion)             #creando vector para fitness.
   poblacion <- matrix(NA,sizePoblacion, sizeCromosoma)   #creando matriz para almacenar poblacion
  
+  ##La inicializacion de la poblacion concuerda con la del paper.
   for (i in 1:sizePoblacion){
     poblacion[i,] <- l+runif(sizeCromosoma)*(u-l)         #asignando valores a cada elemento de población
                                                           #en ausencia de otra información se inicializa con
@@ -64,13 +62,15 @@ genetico <- function(semilla=9876543,sizePoblacion=100,pm=0.1,pr=0.8,
                                                           #la función 'inicia').
   
 
+  ##numIter es "G" en el paper
  numIter<-0
  while(numIter<numIteraciones){                           #desde 0 a numIteraciones, numIteraciones poblaciones
    numIter <- numIter+1
+   ##El shift no tiene pinta de dar problemas, pero habría que verlo.
    shift_ <- min(fitness)                                 #cálculo del mínimo fitness para restarlo y 
                                                           #garantizar que el fitness sea positivo y además
                                                           #se reduce rango
-   
+    ##Toda esta parte nuestro paper lo hace diferente. Comentamos y cambiamos todo. 
    indicePadres <- seleccionPadres(fitness-shift_,        #selección de padres para reproducción, devuelve 
                                            sizePoblacion) #la lista de los índices de los padres seleccionados
                                               
