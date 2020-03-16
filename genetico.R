@@ -111,7 +111,7 @@ genetico <- function(semilla=9876543,sizePoblacion,numIteraciones=50,fichero="re
           rand_i <- sample(1:sizePoblacion, sizePoblacion, replace = TRUE)   
           ind_mutados <- runif(sizePoblacion) < CR[d]  |  c(1:sizePoblacion) != rand_i
           ind_iguales <- ind_mutados != TRUE
-          trials <- poblacion[ind_iguales] + mutados[ind_mutados]
+          trials <- ind_iguales * poblacion + ind_mutados * mutados
        }
    } 
  }
