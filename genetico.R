@@ -75,30 +75,6 @@ genetico <- function(semilla=9876543,sizePoblacion,numIteraciones=50,fichero="re
    shift_ <- min(fitness)                                 #cálculo del mínimo fitness para restarlo y 
                                                           #garantizar que el fitness sea positivo y además
                                                           #se reduce rango
-    ##Toda esta parte nuestro paper lo hace diferente. Comentamos y cambiamos todo. 
-   #indicePadres <- seleccionPadres(fitness-shift_,        #selección de padres para reproducción, devuelve 
-   #                                        sizePoblacion) #la lista de los índices de los padres seleccionados
-   #                                           
-   #
-   #variados <- poblacion[indicePadres,]                   #conjunto de padres a reproducir      
-   #
-   #variados <- recombinacion(variados,pr,l,u)             #recombinación de los padres seleccionados 
-   #
-   #variados <- mutacion(variados,pm,l,u,0.25)             #mutación de los padres ya recombinados
-   #
-   #fitnessVariados <- evaluadora(variados)                #cálculo del fitness de los nuevos hijos
-   #
-   #supervivientes <- seleccionSupervivientes(poblacion,   #selección de supervivientes que formarán
-   #              variados,fitness,fitnessVariados,       #la próxima población, devuelve una lista
-   #                                   sizePoblacion,0.5)  #con los individuos seleccionados y su 
-   #                                                       #fitness
-   #
-   #poblacion <- supervivientes$pob                        #reasignando los individuos seleccionados
-   #fitness <- supervivientes$fit                          #reasignando sus fitness 
-   #rm(supervivientes)
-   #cat(sprintf("Maximo FO =%f en iteracion %d\n",max(fitness),numIter))
-   ##Calculamos fitness y ordenamos segun este.
-   ##Utilizamos un '-' porque por defecto el programa maximiza (y queremos minimizar)
    fitness <- -evaluadora(poblacion)
    aux <- sort(fitness, decreasing = FALSE, index.return = TRUE)
    fitness <- aux$x
