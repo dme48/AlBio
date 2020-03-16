@@ -80,7 +80,15 @@ genetico <- function(semilla=9876543,sizePoblacion,numIteraciones=50,fichero="re
 
    ##                   MUTACION
    ##-------------------------------------------------------
+   ## Calculamos fitness y fitness_w
    fitness <- -evaluadora(poblacion)
+   alpha <- rnorm(1, 0.9, 0.05)
+   if(alpha > 1) alpha <- 1
+   if(alpha < 0.8) alpha <- 0.8
+   fmin <- min(fitness)
+   fmax <- max(fitness)
+   fitness_w <- alpha * (fitness - fmin) / (fmax - fmin)
+   #fitness_w <- fitness_w + (1 - alpha) * ()/()
    aux <- sort(fitness, decreasing = FALSE, index.return = TRUE)
    fitness <- aux$x
    index <- aux$ix
