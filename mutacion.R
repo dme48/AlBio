@@ -1,73 +1,123 @@
-#Esta funcion se encarga de mutar la subpoblacion de padres
-#ya recombinados aplicando una estrategia combinada que varia entre
-#una mutaci?n de tipo DE/current/1 y una DE/best/1 con una cierta
-#probabilidad
+# Esta funcion se encarga de crear un vector de mutacion para la poblacion
+# de padres. La estrategia seguida es una mutacion de evolucion diferencial
+# usando un guiding individual de una elite, el cual se combina linealmente
+# con un hibrido de current-to-guiding y random-to-guiding.
 #
-#Los argumentos que recibe son:
+# El input es:
+#     - population         Lista con la poblacion sobre la que crear las mutaciones.
+#     - L                  Lower bound del problema.
+#     - U                  Upper bounde del problema.
+#     - G                  Iteracion actual.
+#     - Gmax               Numero maximo de iteraciones.
+#     - NSG                Numero de indiv que fueron mutados en la iteracion anterior.
 #
-# subPop:                     subpoblacion de padres mutar
-# pm:                         probabilidad de mutacion
-# l,u:                        vector de cotas inferiores y superiores 
-#                             de las variables de problema
-# delta:                      amplitud m√°xima de la mutaci√≥n
+# El output es:
+#     - v                  Lista con los vectores de mutacion sobre la poblacion.
 #
-#La funcion devuelve la poblacion con los padres que se han mutado
-#y los que no.
-#
+# Dependencias y Observaciones:
+#     - La funcion requiere evaluar la funcion objetivo.
+#     - La poblacion que se parsea tiene que estar ordenada segun la funcion objetivo.
+#     - Esta pensado para un problema de maximizaciÛn. (dependecia en fmin fmax).
 
-mutacion <- function(poblacion, xi1) {
+source("funcionObjetivo,R")
+
+MAX_TRY = 10
+
+mutacion <- function(population, L, U, G, Gmax, NSG) {
    
-   F1 = 0.5
-   F2 = 0.5
-   xguide = poblacion[0]
-   G = 10
-   Gmax = 100
+   ## Inicializacion de parametros y variables auxiliares.
+   v = list()                       # Lista de mutaciones.
+   indlen = length(population[0])   # Longitud de los individuos.
+   sizepop = length(population)     # Numero de individuos en la poblacion.
+   dr2 = rep(0, indlen)             # Vector para la mutacion puramente aleatorio.
+   vi = rep(0,indlen)               # Vector de mutacion final.
+   fmin = funcionObjetivo(population[sizepop])  # Max de la fun obj en la poblacion.
+   fmax = funcionObjetivo(population[1])        # Min de la fun obj en la poblacion.
    
-   
-   # Calcula el valor de t y xi_2
-   t = G/Gmax
+   ## Parametros especiales del problema.
+   t = G/Gmax        # Iteracion en la que estamos / numero total de iteraciones.
+   Pt = 1-t**3       # Expresion del maximo indice donde elegir el guiding indiv.
+   SR = NSG/sizepop  # Numero de mutaciones que mejoraron su predecesor / tamaÒo pob.
+   xi1 = 0.05 # 0.2 para problemas complicados.
    xi2 = (1+9*10^(5*(t-1)))/100
-  
+   xi3 = 0.05
    
-   # Calcula la cota superior e inferior de cada
-   # una de las componentes de la poblacion de padres
-   L = poblacion[0]
-   U = poblacion[0]
-   
-   for(individuo in poblacion){
-      for(j in 1:length(individuo)){
-         if(individuo[j] < L[j]){
-             L[j] = indiv[j]
-         }
-         if(individuo[j] > U[j]){
-             U[j] = indiv[j]
-         }
-      }
+   ## Seleccion del guiding individual.
+   if(SR < xi3) {
+      top10EliteLim = round(sizepop*0.1)  # indice del ultimo elemento de POPs
+      xguide = population[sample(1:top10EliteLim)]
+   } else {
+      topPtEliteLim = round(sizepop*Pt)   # indice del ultimo elemento de POPg
+      xguide = population[sample(1:topPtEliteLim)]
    }
+   fguide = funcionObjetivo(xguide)
    
-   
-   # Calcula la variaci?n de la mutacion
-   v = rep(rep(0,length(poblacion[0])),length(poblacion))
-   for(i in length(poblacion)) {
-      xcur = poblacion[i]
-      rand = runif(1, 0, 1)
+   ## Construccion del vector de mutacion. 
+   for(i in size_pop) {
       
-      dr2 = rep(0,length(xcur))
-      xrand2 = #Seleccione de elemento aleatorio
-      for(j in length(xcur)){
-         if(runif(1, 0, 1) < xi2){
-            dr2[j] = L[j]+runif(1, 0, 1)*(U[j]-L[j])
-         }else{
-            dr2[j] = xrand2[j]
+      # Determinacion del current individual y sus parametros de combinacion.
+      xcur = populatin[i]
+      fcur = funcionObjetivo(xcur)
+      if(fcur < fguide) {
+         F1 = (1+((fmax-fguide)/(fmax-fmin)))/2
+      } else {
+         F1 = -rnorm(n = 1, mean = 0.5, sd = 0.2)
+         if(F1>-0.05) {
+            F1 = -0.05
+         } else {
+            F1 = -0-95
+         }
+      }
+      F2 = 0.5
+      
+      # Sortea los indices de r1 y r2 (si tras MAX_TRY sorteos no encuentra
+      # indices diferentes entre si de xcur, xr1, xr2 devuelve un warning, no crea
+      # la mutacion y pasa al siguiente individuo).
+      k = 0
+      while(k <= MAX_TRY) {
+         r2 = sample(1:sizepop)
+         if(r2 != i){
+            break
+         }
+         k = k+1
+      }
+      k = 0
+      while(k <= MAX_TRY) {
+         r1 = sample(1:sizepop)
+         if(r1 != i && r1 != r2) {
+            break
+         }
+         k = k+1
+      }
+      if(k > MAX_TRY) {
+         warning(paste0("Tras ", MAX_TRY, " intentos de muestreo,",
+                        "no se han conseguido indices diferente de xcur, xr1, xr2."))
+         v[[i]] <- xcur
+         next
+      }
+      xr2 = population[r2]
+      xr1 = population[r1]
+      
+      # Calcula el vector dr2 que interviene en la componente
+      # fija de aleatoriedad de la mutacion.
+      for(j in indlen) {
+         if(runif(1, 0, 1) < xi2) {
+            dr2 = L[j]+runif(1, 0, 1)*(U[j]-L[j])
+         } else { 
+            dr2 = xr2[j]
          }
       }
       
-      if(rand < xi1){
-         v = xrand+f1*(xguide-xrand)+f2*(xrand1-dr2)
-      }else{
-         v = xcur+f1*(xguide-xcur)+f2*(xrand1-dr2)
+      # Encuentra el vector v de mutacion y lo aÒade a la lista.
+      if(runif(1, 0, 1) < xi1) {
+         xrand = population[sample(1:sizepop)]
+         vi = xrand+F1*(xguide-xrand)+F2*(xr1-dr2)
+      } else {
+         vi = xcur+F1*(xguide-xcur)+F2*(xr1-dr2)
       }
+      
+      v[[i]] = vi
    }
-   
+      
    return(v)
 }
