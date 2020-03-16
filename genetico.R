@@ -66,22 +66,27 @@ genetico <- function(semilla=9876543,sizePoblacion,numIteraciones=50,fichero="re
   SR <- 0
   ##Inicializamos F2 a 0.5
   F2 <- 0.5
-
+  ##Inicializamos NSG (offspring que pasa a nueva generacion) a sizePoblacion
+  NSG <- sizePoblacion
   ##numIter es "G" en el paper
  numIter<-0
  while(numIter<numIteraciones){                           #desde 0 a numIteraciones, numIteraciones poblaciones
    numIter <- numIter+1
+   t <- numIter / numIteraciones
    ##El shift no tiene pinta de dar problemas, pero habría que verlo.
    shift_ <- min(fitness)                                 #cálculo del mínimo fitness para restarlo y 
                                                           #garantizar que el fitness sea positivo y además
                                                           #se reduce rango
+
+   ##                   MUTACION
+   ##-------------------------------------------------------
    fitness <- -evaluadora(poblacion)
    aux <- sort(fitness, decreasing = FALSE, index.return = TRUE)
    fitness <- aux$x
    index <- aux$ix
    poblacion <- poblacion[index]
    ##Mutamos, generando una nueva generacion de individuos
-   mutados <- mutacion(poblacion)
+   mutados <- mutacion(poblacion, l, u, t, NSG)
    ##Calculamos el CR de cada individuo
    ##CR es la probabilidad de que se hereden mutaciones en el "trial individual"
    CR <- 1 - index / sizePoblacion
@@ -89,17 +94,24 @@ genetico <- function(semilla=9876543,sizePoblacion,numIteraciones=50,fichero="re
    bajos <- CR < 0.05
    CR[altos] <- 0.95
    CR[bajos] <- 0.05
-   ##Sustituimos aquellos individuos segun las condiciones del paper (ec. 10) 
+
+   ##               GENERACION DE TRIALS
+   ##-------------------------------------------------- 
+   #Definimos la dimension y el vector de trials
    dim <- length(poblacion[1])
+   trial <- 0 * poblacion
+   ##En el caso 1D "todas" las componentes se sustituyen
    if(dim == 1){
-      poblacion <- mutados
+      trial <- mutados
    }
+   ##Para el caso general usamos ec. 10
    else{
    if(dim == 1){
        for(d in 1:dim){ 
           rand_i <- sample(1:sizePoblacion, sizePoblacion, replace = TRUE)   
-          subs_flag <- runif(sizePoblacion) < CR[d]  |  c(1:sizePoblacion) != rand_i
-          poblacion[subs_flag] <- mutados[subs_flag]
+          ind_mutados <- runif(sizePoblacion) < CR[d]  |  c(1:sizePoblacion) != rand_i
+          ind_iguales <- ind_mutados != TRUE
+          trials <- poblacion[ind_iguales] + mutados[ind_mutados]
        }
    } 
  }
