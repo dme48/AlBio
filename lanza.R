@@ -3,7 +3,7 @@
 source("genetico.R")
 source("recombinacionPuntoCorte.R")  #define una función llamada recombinacion()
 source("seleccionSupervivientes.R")  #define una función llamada seleccionSupervivientes()
-source("mutacionUniforme.R")         #define una función llamada mutacion()
+source("mutacion.R")         #define una función llamada mutacion()
 source("seleccionPadres.R")          #define una función seleccionPadres()
 source("inicia.R")                   #inicia el problema a resolver y sus caracteristicas
        
