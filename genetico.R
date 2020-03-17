@@ -103,7 +103,7 @@ genetico <- function(semilla=9876543,sizePoblacion,numIteraciones=50,fichero="re
    ##               GENERACION DE TRIALS
    ##-------------------------------------------------- 
    #Definimos la dimension y el vector de trials
-   dim <- length(poblacion[1,])
+   dim <- NCOL(poblacion)
    trial <- 0 * poblacion
    ##En el caso 1D "todas" las componentes se sustituyen
    if(dim == 1){

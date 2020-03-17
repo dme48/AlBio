@@ -24,8 +24,8 @@ mutacion <- function(population, fitness, L, U, t, NSG) {
    
    ## Inicializacion de parametros y variables auxiliares.
    v = list()                       # Lista de mutaciones.
-   indlen = length(population[1])   # Longitud de los individuos.
-   sizepop = length(population[,1])     # Numero de individuos en la poblacion.
+   indlen = NROW(population)   # Longitud de los individuos.
+   sizepop = NCOL(population)     # Numero de individuos en la poblacion.
    dr2 = rep(0, indlen)             # Vector para la mutacion puramente aleatorio.
    vi = rep(0,indlen)               # Vector de mutacion final.
    fmin = min(fitness)              # Max de la fun obj en la poblacion.
@@ -88,7 +88,7 @@ mutacion <- function(population, fitness, L, U, t, NSG) {
       if(k > MAX_TRY) {
          warning(paste0("Tras ", MAX_TRY, " intentos de muestreo,",
                         "no se han conseguido indices diferente de xcur, xr1, xr2."))
-         v[[i]] <- xcur
+         v[i] <- xcur
          next
       }
       xr2 = population[r2]
@@ -106,13 +106,13 @@ mutacion <- function(population, fitness, L, U, t, NSG) {
       
       # Encuentra el vector v de mutacion y lo añade a la lista.
       if(runif(1, 0, 1) < xi1) {
-         xrand = population[sample(1:sizepop)]
+         xrand = population[sample(1:sizepop, 1)]
          vi = xrand+F1*(xguide-xrand)+F2*(xr1-dr2)
       } else {
          vi = xcur+F1*(xguide-xcur)+F2*(xr1-dr2)
       }
       
-      v[[i]] = vi
+      v[i] = vi
    }
       
    return(v)
