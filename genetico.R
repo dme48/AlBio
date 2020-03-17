@@ -71,7 +71,7 @@ genetico <- function(semilla=9876543,sizePoblacion,numIteraciones=50,fichero="re
    aux <- sort(fitness, decreasing = FALSE, index.return = TRUE)
    fitness <- aux$x
    index <- aux$ix
-   poblacion <- poblacion[index]
+   poblacion <- poblacion[index,]
    ## Calculamos fitness_w:
    ## ----> primer termino
    alpha <- rnorm(1, 0.9, 0.05)
