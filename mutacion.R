@@ -18,12 +18,9 @@
 #     - La funcion requiere evaluar la funcion objetivo.
 #     - La poblacion que se parsea tiene que estar ordenada segun la funcion objetivo.
 #     - Esta pensado para un problema de maximización. (dependecia en fmin fmax).
-
-source("funcionObjetivo,R")
-
 MAX_TRY = 10
 
-mutacion <- function(population, L, U, G, Gmax, NSG) {
+mutacion <- function(population, fitness, L, U, G, Gmax, NSG) {
    
    ## Inicializacion de parametros y variables auxiliares.
    v = list()                       # Lista de mutaciones.
