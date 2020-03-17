@@ -48,7 +48,6 @@ genetico <- function(semilla=9876543,sizePoblacion,numIteraciones=50,fichero="re
   }
   ## Utilizamos el '-' para pasar de maximizacion a minimizacion
   fitness <- - evaluadora(poblacion)                      #evaluando la población. El fitness corresponde
-  
   ##Inicializamos el SR a 0:
   SR <- 0
   ##Inicializamos F2 a 0.5

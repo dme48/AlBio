@@ -24,7 +24,7 @@ mutacion <- function(population, fitness, L, U, t, NSG) {
    
    ## Inicializacion de parametros y variables auxiliares.
    v = list()                       # Lista de mutaciones.
-   indlen = length(population[0])   # Longitud de los individuos.
+   indlen = length(population[1])   # Longitud de los individuos.
    sizepop = length(population)     # Numero de individuos en la poblacion.
    dr2 = rep(0, indlen)             # Vector para la mutacion puramente aleatorio.
    vi = rep(0,indlen)               # Vector de mutacion final.
@@ -41,19 +41,21 @@ mutacion <- function(population, fitness, L, U, t, NSG) {
    ## Seleccion del guiding individual.
    if(SR < xi3) {
       top10EliteLim = round(sizepop*0.1)  # indice del ultimo elemento de POPs
-      iguide = sample(1:top10EliteLim)
+      iguide = sample(1:top10EliteLim, 1)
    } else {
       topPtEliteLim = round(sizepop*Pt)   # indice del ultimo elemento de POPg
-      iguide = sample(1:topPtEliteLim)
+      iguide = sample(1:topPtEliteLim, 1)
    }
    xguide = population[iguide]
-   fguide = fitness[xguide]
+   fguide = fitness[iguide]
    
    ## Construccion del vector de mutacion. 
-   for(i in size_pop) {
+   for(i in sizepop) {
       # Determinacion del current individual y sus parametros de combinacion.
       xcur = population[i]
       fcur = fitness[i]
+      print(fcur)
+      print(fguide)
       if(fcur < fguide) {
          F1 = (1+((fmax-fguide)/(fmax-fmin)))/2
       } else {
@@ -71,7 +73,7 @@ mutacion <- function(population, fitness, L, U, t, NSG) {
       # la mutacion y pasa al siguiente individuo).
       k = 0
       while(k <= MAX_TRY) {
-         r2 = sample(1:sizepop)
+         r2 = sample(1:sizepop, 1)
          if(r2 != i){
             break
          }
@@ -79,7 +81,7 @@ mutacion <- function(population, fitness, L, U, t, NSG) {
       }
       k = 0
       while(k <= MAX_TRY) {
-         r1 = sample(1:sizepop)
+         r1 = sample(1:sizepop, 1)
          if(r1 != i && r1 != r2) {
             break
          }
