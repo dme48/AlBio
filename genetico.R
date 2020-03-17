@@ -38,10 +38,7 @@ genetico <- function(semilla=9876543,sizePoblacion,numIteraciones=50,fichero="re
   #Información general de la ejecucion, se muestra en la consola.
   cat(sprintf("Procesando problema: %s (%d)\n",problema,sizeCromosoma))
   cat(sprintf("Semilla: %d\n",semilla))
-  #cat(sprintf("Tamano de Poblacion: %d\n",sizePoblacion))
   cat(sprintf("Numero iteraciones: %d\n",numIteraciones))
-  #cat(sprintf("Probabilidad de mutación: %6.4f\n",pm))
-  #cat(sprintf("Probabilidad de recombinación: %6.4f\n",pr))
   t <- proc.time()                                       #Guardamos comienzo de ejecución
   fitness <- vector("numeric",sizePoblacion)             #creando vector para fitness.
   poblacion <- matrix(NA,sizePoblacion, sizeCromosoma)   #creando matriz para almacenar poblacion
@@ -118,7 +115,7 @@ genetico <- function(semilla=9876543,sizePoblacion,numIteraciones=50,fichero="re
    ##               GENERACION DE TRIALS
    ##-------------------------------------------------- 
    #Definimos la dimension y el vector de trials
-   dim <- length(poblacion[1])
+   dim <- length(poblacion[1,])
    trial <- 0 * poblacion
    ##En el caso 1D "todas" las componentes se sustituyen
    if(dim == 1){
