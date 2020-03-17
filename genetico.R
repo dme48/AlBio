@@ -47,8 +47,9 @@ genetico <- function(semilla=9876543,sizePoblacion,numIteraciones=50,fichero="re
   poblacion <- matrix(NA,sizePoblacion, sizeCromosoma)   #creando matriz para almacenar poblacion
  
   ##La inicializacion de la poblacion concuerda con la del paper.
+  print(poblacion)
   for (i in 1:sizePoblacion){
-    poblacion[i,] <- l+runif(sizeCromosoma)*(u-l)         #asignando valores a cada elemento de población
+    poblacion[i,] <- runif(sizeCromosoma, l, u)         #asignando valores a cada elemento de población
                                                           #en ausencia de otra información se inicializa con
                                                           #valores aleatorios entre l[j] y u[j], l[j]<=x[j]<=u[j]
   }
@@ -69,30 +70,36 @@ genetico <- function(semilla=9876543,sizePoblacion,numIteraciones=50,fichero="re
   ##Inicializamos NSG (offspring que pasa a nueva generacion) a sizePoblacion
   NSG <- sizePoblacion
   ##numIter es "G" en el paper
- numIter<-0
+ numIter<-1
  while(numIter<numIteraciones){                           #desde 0 a numIteraciones, numIteraciones poblaciones
-   numIter <- numIter+1
    t <- numIter / numIteraciones
    ##El shift no tiene pinta de dar problemas, pero habría que verlo.
    shift_ <- min(fitness)                                 #cálculo del mínimo fitness para restarlo y 
                                                           #garantizar que el fitness sea positivo y además
                                                           #se reduce rango
 
-   ##                   MUTACION
+   ##                   CALCULO FITNESS
    ##-------------------------------------------------------
-   ## Calculamos fitness y fitness_w
+   ## Calculamos fitness y ordenamos segun ella
    fitness <- -evaluadora(poblacion)
+   aux <- sort(fitness, decreasing = FALSE, index.return = TRUE)
+   fitness <- aux$x
+   index <- aux$ix
+   poblacion <- poblacion[index]
+   ## Calculamos fitness_w:
+   ## ----> primer termino
    alpha <- rnorm(1, 0.9, 0.05)
    if(alpha > 1) alpha <- 1
    if(alpha < 0.8) alpha <- 0.8
    fmin <- min(fitness)
    fmax <- max(fitness)
-   fitness_w <- alpha * (fitness - fmin) / (fmax - fmin)
+   ter1 <- alpha * (fitness - fmin) / (fmax - fmin)
+   ## ----> segundo termino
+   Dmax <- poblacion[1]
+   distancias <- Dmax - poblacion[,]
    #fitness_w <- fitness_w + (1 - alpha) * ()/()
-   aux <- sort(fitness, decreasing = FALSE, index.return = TRUE)
-   fitness <- aux$x
-   index <- aux$ix
-   poblacion <- poblacion[index]
+   ##                   MUTACION
+   ##-------------------------------------------------------
    ##Mutamos, generando una nueva generacion de individuos
    mutados <- mutacion(poblacion, l, u, t, NSG)
    ##Calculamos el CR de cada individuo
@@ -122,6 +129,7 @@ genetico <- function(semilla=9876543,sizePoblacion,numIteraciones=50,fichero="re
           trials[d] <- ind_iguales * poblacion[d] + ind_mutados * mutados[d]
        }
    } 
+   numIter <- numIter+1
  }
 
 
