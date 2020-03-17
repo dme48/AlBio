@@ -19,7 +19,6 @@
 #probabilidad de recombinación 0.8, genera 50 poblaciones, guarda los resultados en el 
 #fichero 'result.txt' y aproxima el óptimo de la función 'Easom'
 genetico <- function(semilla=9876543,sizePoblacion,numIteraciones=50,fichero="result.txt",problema="Easom")
-  
 {
  
   #Comienza, mediante la llamada a la función 'inicia' encargada de establecer
@@ -39,26 +38,16 @@ genetico <- function(semilla=9876543,sizePoblacion,numIteraciones=50,fichero="re
   cat(sprintf("Procesando problema: %s (%d)\n",problema,sizeCromosoma))
   cat(sprintf("Semilla: %d\n",semilla))
   cat(sprintf("Numero iteraciones: %d\n",numIteraciones))
-  t <- proc.time()                                       #Guardamos comienzo de ejecución
+  ti <- proc.time()                                       #Guardamos comienzo de ejecución
   fitness <- vector("numeric",sizePoblacion)             #creando vector para fitness.
   poblacion <- matrix(NA,sizePoblacion, sizeCromosoma)   #creando matriz para almacenar poblacion
  
-  ##La inicializacion de la poblacion concuerda con la del paper.
-  print(poblacion)
+  ##La inicializacion de la poblacion concuerda con la del paper, aleatoria entre l y u
   for (i in 1:sizePoblacion){
-    poblacion[i,] <- runif(sizeCromosoma, l, u)         #asignando valores a cada elemento de población
-                                                          #en ausencia de otra información se inicializa con
-                                                          #valores aleatorios entre l[j] y u[j], l[j]<=x[j]<=u[j]
+    poblacion[i,] <- runif(sizeCromosoma, l, u)
   }
   ## Utilizamos el '-' para pasar de maximizacion a minimizacion
   fitness <- - evaluadora(poblacion)                      #evaluando la población. El fitness corresponde
-                                                          #con el valor de la función objetivo (los 
-                                                          #problemas de la colección están puestos en forma 
-                                                          #de máximo para directamente máximizar el fitness)
-                                                          #La función evaluadora está definida de forma que 
-                                                          #tiene en cuenta el nombre del problema pasado en la 
-                                                          #llamada a la función genetico cuando (de esto se encargo
-                                                          #la función 'inicia').
   
   ##Inicializamos el SR a 0:
   SR <- 0
@@ -134,7 +123,7 @@ genetico <- function(semilla=9876543,sizePoblacion,numIteraciones=50,fichero="re
  }
 
 
- finEjecucion=proc.time()-t                               #registro de tiempo de ejecución transcurrido
+ finEjecucion=proc.time()-ti
  fileConn<-file(fichero,open="at")                        #apertura del fichero de resultados
  writeLines(sprintf("%s\t%9d\t%3d\t%4d\t%f\t%f ",         #escribiendo información básica
                     problema,semilla,sizePoblacion, numIteraciones,max(fitness),finEjecucion[3]), fileConn)
