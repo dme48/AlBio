@@ -95,9 +95,14 @@ genetico <- function(semilla=9876543,sizePoblacion,numIteraciones=50,fichero="re
    fmax <- max(fitness)
    ter1 <- alpha * (fitness - fmin) / (fmax - fmin)
    ## ----> segundo termino
-   Dmax <- poblacion[1]
-   distancias <- Dmax - poblacion[,]
-   #fitness_w <- fitness_w + (1 - alpha) * ()/()
+   ##Creamos una matriz en la que se repite la posicion del mejor
+   xbest <- matrix(rep(poblacion[1,], each=sizePoblacion),nrow=sizePoblacion)
+   ##Calculamos distancias y guardamos la mayor de ellas
+   distancias <- rowSums( (xbest - poblacion) * (xbest - poblacion) )
+   Dmax <- max(distancias)
+   ##Calculamos el segundo termino
+   ter2 <- (1 - alpha) * (Dmax - distancias)/(Dmax + distancias)
+   fitness_w <- ter1 + ter2
    ##                   MUTACION
    ##-------------------------------------------------------
    ##Mutamos, generando una nueva generacion de individuos
