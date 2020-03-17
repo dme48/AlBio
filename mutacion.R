@@ -20,7 +20,7 @@
 #     - Esta pensado para un problema de maximización. (dependecia en fmin fmax).
 MAX_TRY = 10
 
-mutacion <- function(population, fitness, L, U, G, Gmax, NSG) {
+mutacion <- function(population, fitness, L, U, t, NSG) {
    
    ## Inicializacion de parametros y variables auxiliares.
    v = list()                       # Lista de mutaciones.
@@ -28,11 +28,10 @@ mutacion <- function(population, fitness, L, U, G, Gmax, NSG) {
    sizepop = length(population)     # Numero de individuos en la poblacion.
    dr2 = rep(0, indlen)             # Vector para la mutacion puramente aleatorio.
    vi = rep(0,indlen)               # Vector de mutacion final.
-   fmin = funcionObjetivo(population[sizepop])  # Max de la fun obj en la poblacion.
-   fmax = funcionObjetivo(population[1])        # Min de la fun obj en la poblacion.
+   fmin = min(fitness)              # Max de la fun obj en la poblacion.
+   fmax = max(fitness)              # Min de la fun obj en la poblacion.
    
    ## Parametros especiales del problema.
-   t = G/Gmax        # Iteracion en la que estamos / numero total de iteraciones.
    Pt = 1-t**3       # Expresion del maximo indice donde elegir el guiding indiv.
    SR = NSG/sizepop  # Numero de mutaciones que mejoraron su predecesor / tamaño pob.
    xi1 = 0.05 # 0.2 para problemas complicados.
@@ -42,19 +41,19 @@ mutacion <- function(population, fitness, L, U, G, Gmax, NSG) {
    ## Seleccion del guiding individual.
    if(SR < xi3) {
       top10EliteLim = round(sizepop*0.1)  # indice del ultimo elemento de POPs
-      xguide = population[sample(1:top10EliteLim)]
+      iguide = sample(1:top10EliteLim)
    } else {
       topPtEliteLim = round(sizepop*Pt)   # indice del ultimo elemento de POPg
-      xguide = population[sample(1:topPtEliteLim)]
+      iguide = sample(1:topPtEliteLim)
    }
-   fguide = funcionObjetivo(xguide)
+   xguide = population[iguide]
+   fguide = fitness[xguide]
    
    ## Construccion del vector de mutacion. 
    for(i in size_pop) {
-      
       # Determinacion del current individual y sus parametros de combinacion.
-      xcur = populatin[i]
-      fcur = funcionObjetivo(xcur)
+      xcur = population[i]
+      fcur = fitness[i]
       if(fcur < fguide) {
          F1 = (1+((fmax-fguide)/(fmax-fmin)))/2
       } else {
