@@ -25,7 +25,7 @@ mutacion <- function(population, fitness, L, U, t, NSG) {
    ## Inicializacion de parametros y variables auxiliares.
    v = list()                       # Lista de mutaciones.
    indlen = length(population[1])   # Longitud de los individuos.
-   sizepop = length(population)     # Numero de individuos en la poblacion.
+   sizepop = length(population[,1])     # Numero de individuos en la poblacion.
    dr2 = rep(0, indlen)             # Vector para la mutacion puramente aleatorio.
    vi = rep(0,indlen)               # Vector de mutacion final.
    fmin = min(fitness)              # Max de la fun obj en la poblacion.
@@ -50,12 +50,10 @@ mutacion <- function(population, fitness, L, U, t, NSG) {
    fguide = fitness[iguide]
    
    ## Construccion del vector de mutacion. 
-   for(i in sizepop) {
+   for(i in 1:sizepop) {
       # Determinacion del current individual y sus parametros de combinacion.
       xcur = population[i]
       fcur = fitness[i]
-      print(fcur)
-      print(fguide)
       if(fcur < fguide) {
          F1 = (1+((fmax-fguide)/(fmax-fmin)))/2
       } else {
