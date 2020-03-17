@@ -92,6 +92,13 @@ genetico <- function(semilla=9876543,sizePoblacion,numIteraciones=50,fichero="re
    ##-------------------------------------------------------
    ##Mutamos, generando una nueva generacion de individuos
    mutados <- mutacion(poblacion, fitness, l, u, t, NSG)
+   print("Poblacion")
+   print(NROW(poblacion))
+   print(NCOL(poblacion))
+   
+   print("Mutados")
+   print(NROW(mutados))
+   print(NCOL(mutados))
    ##Calculamos el CR de cada individuo
    ##CR es la probabilidad de que se hereden mutaciones en el "trial individual"
    CR <- 1 - index / sizePoblacion
