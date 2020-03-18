@@ -122,6 +122,8 @@ genetico <- function(semilla=9876543,sizePoblacion,numIteraciones=50,fichero="re
    xbest <- trials[ufitness == fmax,]
    xbest <- matrix(rep(xbest, each=sizePoblacion),nrow=sizePoblacion)
    ##Calculamos distancias y guardamos la mayor de ellas
+   print(NCOL(xbest))
+   print(NCOL(trials))
    distancias <- rowSums( (xbest - trials) * (xbest - trials) )
    Dmax <- max(distancias)
    ##Calculamos el segundo termino
@@ -130,7 +132,8 @@ genetico <- function(semilla=9876543,sizePoblacion,numIteraciones=50,fichero="re
    ##               SELECCION DE TRIALS
    ##--------------------------------------------------------
    change <- ufitness < fitness | ( ufitness_w <= ufitness & poblacion != poblacion[1,] )
-   poblacion[change] <- trials[change]
+   poblacion[change,] <- trials[change,]
+   NSG <- sum( change )   
  }
 
 
