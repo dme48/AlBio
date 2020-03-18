@@ -39,15 +39,12 @@ genetico <- function(semilla=9876543,sizePoblacion,numIteraciones=50,fichero="re
   cat(sprintf("Semilla: %d\n",semilla))
   cat(sprintf("Numero iteraciones: %d\n",numIteraciones))
   ti <- proc.time()                                       #Guardamos comienzo de ejecución
-  fitness <- vector("numeric",sizePoblacion)             #creando vector para fitness.
   poblacion <- matrix(NA,sizePoblacion, sizeCromosoma)   #creando matriz para almacenar poblacion
  
   ##La inicializacion de la poblacion concuerda con la del paper, aleatoria entre l y u
-  for (i in 1:sizePoblacion){
+  for(i in 1:sizePoblacion){
     poblacion[i,] <- runif(sizeCromosoma, l, u)
   }
-  ## Utilizamos el '-' para pasar de maximizacion a minimizacion
-  fitness <- - evaluadora(poblacion)                      #evaluando la población. El fitness corresponde
   ##Inicializamos el SR a 0:
   SR <- 0
   ##Inicializamos F2 a 0.5
@@ -55,14 +52,8 @@ genetico <- function(semilla=9876543,sizePoblacion,numIteraciones=50,fichero="re
   ##Inicializamos NSG (offspring que pasa a nueva generacion) a sizePoblacion
   NSG <- sizePoblacion
   ##numIter es "G" en el paper
- numIter<-1
- while(numIter<numIteraciones){                           #desde 0 a numIteraciones, numIteraciones poblaciones
-   t <- numIter / numIteraciones
-   ##El shift no tiene pinta de dar problemas, pero habría que verlo.
-   shift_ <- min(fitness)                                 #cálculo del mínimo fitness para restarlo y 
-                                                          #garantizar que el fitness sea positivo y además
-                                                          #se reduce rango
-
+ for(numIter in 1:numIteraciones){                           #desde 0 a numIteraciones, numIteraciones poblaciones
+   t <- numIter / ( numIteraciones + 1)
    ##                   CALCULO FITNESS
    ##-------------------------------------------------------
    ## Calculamos fitness y ordenamos segun ella
@@ -118,7 +109,28 @@ genetico <- function(semilla=9876543,sizePoblacion,numIteraciones=50,fichero="re
           trials[d] <- ind_iguales * poblacion[d] + ind_mutados * mutados[d]
        }
    } 
-   numIter <- numIter+1
+   ##               CALCULO FITNESS TRIALS
+   ##--------------------------------------------------------
+   ##Que inicie por u indica que pertenece a los trials y no a poblacion:
+   ufitness <- -evaluadora(trials)
+   ## Calculamos ufitness_w:
+   ## ----> primer termino (mantenemos el valor de alpha)
+   fmin <- min(ufitness)
+   fmax <- max(ufitness)
+   ter1 <- alpha * (fitness - fmin) / (fmax - fmin)
+   ## ----> segundo termino
+   xbest <- trials[ufitness == fmax,]
+   xbest <- matrix(rep(xbest, each=sizePoblacion),nrow=sizePoblacion)
+   ##Calculamos distancias y guardamos la mayor de ellas
+   distancias <- rowSums( (xbest - trials) * (xbest - trials) )
+   Dmax <- max(distancias)
+   ##Calculamos el segundo termino
+   ter2 <- (1 - alpha) * (Dmax - distancias)/(Dmax + distancias)
+   ufitness_w <- ter1 + ter2
+   ##               SELECCION DE TRIALS
+   ##--------------------------------------------------------
+   change <- ufitness < fitness | ( ufitness_w <= ufitness & poblacion != poblacion[1,] )
+   poblacion[change] <- trials[change]
  }
 
 

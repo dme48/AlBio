@@ -49,20 +49,21 @@ mutacion <- function(population, fitness, L, U, t, NSG) {
    }
    xguide = population[iguide,] #FALTA COMA
    fguide = fitness[iguide]
-   
    ## Construccion del vector de mutacion.
    for(i in 1:sizepop) {
       # Determinacion del current individual y sus parametros de combinacion.
       xcur = population[i,] # FALTA UNA COMA
       fcur = fitness[i]
-      if(fcur < fguide) {
+      if(fcur > fguide) {
          F1 = (1+((fmax-fguide)/(fmax-fmin)))/2
-      } else {
+      }
+      else {
          F1 = -rnorm(n = 1, mean = 0.5, sd = 0.2)
          if(F1>-0.05) {
             F1 = -0.05
-         } else {
-            F1 = -0-95
+         }
+         if(F1 < -0.95) {
+            F1 = -0.95
          }
       }
       F2 = 0.5
