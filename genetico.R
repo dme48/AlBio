@@ -111,10 +111,10 @@ genetico <- function(semilla=9876543,sizePoblacion,numIteraciones=50,fichero="re
    ##-------------------------------------------------- 
    #Definimos la dimension y el vector de trials
    dim <- NCOL(poblacion)
-   trial <- 0 * poblacion
+   trials <- 0 * poblacion
    ##En el caso 1D "todas" las componentes se sustituyen
    if(dim == 1){
-      trial <- mutados
+      trials <- mutados
    }
    ##Para el caso general usamos ec. 10
    else{
