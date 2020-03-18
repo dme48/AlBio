@@ -1,5 +1,6 @@
 # Este fichero se encarga de lanzar la ejecucion de los algoritmos y de guardar la informacion correspondiente
 #Cargamos las funciones necesarias, genetico.R, mutacionUniforme.R, etc.
+setwd("~/Documents/Zaragoza/AB/Trabajo Evolucion Diferencial/Scripts")
 source("genetico.R")
 source("recombinacionPuntoCorte.R")  #define una función llamada recombinacion()
 source("seleccionSupervivientes.R")  #define una función llamada seleccionSupervivientes()
