@@ -17,23 +17,24 @@
 # Dependencias y Observaciones:
 #     - La funcion requiere evaluar la funcion objetivo.
 #     - La poblacion que se parsea tiene que estar ordenada segun la funcion objetivo.
-#     - Esta pensado para un problema de maximización. (dependecia en fmin fmax).
+#     - Esta pensado para un problema de maximizacion. (dependecia en fmin fmax).
+
 MAX_TRY = 10
 
 mutacion <- function(population, fitness, L, U, t, NSG) {
    
    ## Inicializacion de parametros y variables auxiliares.
    v = list()                       # Lista de mutaciones.
-   indlen = NROW(population)   # Longitud de los individuos.
-   sizepop = NCOL(population)     # Numero de individuos en la poblacion.
-   dr2 = rep(0, indlen)             # Vector para la mutacion puramente aleatorio.
+   indlen = length(population[1,])  # Longitud de los individuos.
+   sizepop = length(population[,1]) # Numero de individuos en la poblacion.
+   dr2 = rep(0,indlen)              # Vector para la mutacion puramente aleatorio.
    vi = rep(0,indlen)               # Vector de mutacion final.
    fmin = min(fitness)              # Max de la fun obj en la poblacion.
    fmax = max(fitness)              # Min de la fun obj en la poblacion.
    
    ## Parametros especiales del problema.
    Pt = 1-t**3       # Expresion del maximo indice donde elegir el guiding indiv.
-   SR = NSG/sizepop  # Numero de mutaciones que mejoraron su predecesor / tamaño pob.
+   SR = NSG/sizepop  # Numero de mutaciones que mejoraron su predecesor / tama?o pob.
    xi1 = 0.05 # 0.2 para problemas complicados.
    xi2 = (1+9*10^(5*(t-1)))/100
    xi3 = 0.05
@@ -46,13 +47,13 @@ mutacion <- function(population, fitness, L, U, t, NSG) {
       topPtEliteLim = round(sizepop*Pt)   # indice del ultimo elemento de POPg
       iguide = sample(1:topPtEliteLim, 1)
    }
-   xguide = population[iguide]
+   xguide = population[iguide,] #FALTA COMA
    fguide = fitness[iguide]
    
-   ## Construccion del vector de mutacion. 
+   ## Construccion del vector de mutacion.
    for(i in 1:sizepop) {
       # Determinacion del current individual y sus parametros de combinacion.
-      xcur = population[i]
+      xcur = population[i,] # FALTA UNA COMA
       fcur = fitness[i]
       if(fcur < fguide) {
          F1 = (1+((fmax-fguide)/(fmax-fmin)))/2
@@ -91,8 +92,8 @@ mutacion <- function(population, fitness, L, U, t, NSG) {
          v[[i]] <- xcur
          next
       }
-      xr2 = population[r2]
-      xr1 = population[r1]
+      xr2 = population[r2,]
+      xr1 = population[r1,] # FALTA COMA
       
       # Calcula el vector dr2 que interviene en la componente
       # fija de aleatoriedad de la mutacion.
@@ -104,9 +105,9 @@ mutacion <- function(population, fitness, L, U, t, NSG) {
          }
       }
       
-      # Encuentra el vector v de mutacion y lo añade a la lista.
+      # Encuentra el vector v de mutacion y lo anade a la lista.
       if(runif(1, 0, 1) < xi1) {
-         xrand = population[sample(1:sizepop, 1)]
+         xrand = population[sample(1:sizepop, 1),]
          vi = xrand+F1*(xguide-xrand)+F2*(xr1-dr2)
       } else {
          vi = xcur+F1*(xguide-xcur)+F2*(xr1-dr2)
@@ -114,6 +115,7 @@ mutacion <- function(population, fitness, L, U, t, NSG) {
       
       v[[i]] = vi
    }
-      
+   
+   v_matrix = array(as.numeric(unlist(vi)), dim=c(sizepop, indlen))
    return(v)
 }
