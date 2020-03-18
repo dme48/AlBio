@@ -116,6 +116,6 @@ mutacion <- function(population, fitness, L, U, t, NSG) {
       v[[i]] = vi
    }
    
-   v_matrix = array(as.numeric(unlist(vi)), dim=c(sizepop, indlen))
-   return(v)
+   v_matrix = matrix(as.numeric(unlist(vi)), nrow = sizepop, ncol = indlen)
+   return(v_matrix)
 }
