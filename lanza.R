@@ -4,6 +4,7 @@ setwd("~/Documents/Zaragoza/AB/Trabajo Evolucion Diferencial/Scripts")
 source("genetico.R")
 source("mutacion.R")         #define una función llamada mutacion()
 source("fitness_ponderado.R")          #Calcula fitness_w
+source("seleccion_trials.R")          #Calcula fitness_w
 source("inicia.R")                   #inicia el problema a resolver y sus caracteristicas
        
 #Lista de problemas incorporados (se podría ampliar)

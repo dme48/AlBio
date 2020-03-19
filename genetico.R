@@ -103,19 +103,7 @@ genetico <- function(semilla=9876543,sizePoblacion,numIteraciones=50,fichero="re
    ##Que inicie por u indica que pertenece a los trials y no a poblacion:
    ufitness <- -evaluadora(trials)
    ufitness_w <- fitness_ponderada(trials, ufitness, alpha)
-   ##               SELECCION DE TRIALS
-   ##--------------------------------------------------------
-   NSG <- 0
-   for (ind in 1:sizePoblacion){
-    change <- ufitness[ind] < fitness[ind] | ( ufitness_w[ind] <= fitness_w[ind] & ind != 1 )
-    if (change){
-        NSG <- NSG + 1
-        poblacion[ind] <- trials[ind]
-    }
-   }
-   #change <- ufitness < fitness | ( ufitness_w <= fitness_w & poblacion != poblacion[1,] )
-   #poblacion[change] <- trials[change]
-   #NSG <- sum( change[,1] )   
+   poblacion <- selecciona(poblacion, trials, fitness, ufitness, fitness_w, ufitness_w)
  }
 
 
