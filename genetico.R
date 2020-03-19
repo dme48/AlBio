@@ -54,6 +54,10 @@ genetico <- function(semilla=9876543,sizePoblacion,numIteraciones=50,fichero="re
   ##numIter es "G" en el paper
  for(numIter in 1:numIteraciones){                           #desde 0 a numIteraciones, numIteraciones poblaciones
    t <- numIter / ( numIteraciones + 1)
+   ##Calculamos el alpha para esta iteracion
+   alpha <- rnorm(1, 0.9, 0.05)
+   if(alpha > 1) alpha <- 1
+   if(alpha < 0.8) alpha <- 0.8
    ##                   CALCULO FITNESS
    ##-------------------------------------------------------
    ## Calculamos fitness y ordenamos segun ella
@@ -62,23 +66,8 @@ genetico <- function(semilla=9876543,sizePoblacion,numIteraciones=50,fichero="re
    fitness <- aux$x
    index <- aux$ix
    poblacion <- poblacion[index,]
-   ## Calculamos fitness_w:
-   ## ----> primer termino
-   alpha <- rnorm(1, 0.9, 0.05)
-   if(alpha > 1) alpha <- 1
-   if(alpha < 0.8) alpha <- 0.8
-   fmin <- min(fitness)
-   fmax <- max(fitness)
-   ter1 <- alpha * (fitness - fmin) / (fmax - fmin)
-   ## ----> segundo termino
-   ##Creamos una matriz en la que se repite la posicion del mejor
-   xbest <- matrix(rep(poblacion[1,], each=sizePoblacion),nrow=sizePoblacion)
-   ##Calculamos distancias y guardamos la mayor de ellas
-   distancias <- rowSums( (xbest - poblacion) * (xbest - poblacion) )
-   Dmax <- max(distancias)
-   ##Calculamos el segundo termino
-   ter2 <- (1 - alpha) * (Dmax - distancias)/(Dmax + distancias)
-   fitness_w <- ter1 + ter2
+   ## Calculamos la fitness ponderada:
+   fitness_w <- fitness_ponderada(poblacion, fitness, alpha)
    ##                   MUTACION
    ##-------------------------------------------------------
    ##Mutamos, generando una nueva generacion de individuos
@@ -104,36 +93,29 @@ genetico <- function(semilla=9876543,sizePoblacion,numIteraciones=50,fichero="re
    else{
       for(d in 1:dim){ 
           rand_i <- sample(1:sizePoblacion, sizePoblacion, replace = TRUE)   
-          ind_mutados <- runif(sizePoblacion) < CR[d]  |  c(1:sizePoblacion) != rand_i
+          ind_mutados <- runif(sizePoblacion) < CR  |  c(1:sizePoblacion) != rand_i
           ind_iguales <- ind_mutados != TRUE
-          trials[d] <- ind_iguales * poblacion[d] + ind_mutados * mutados[d]
+          trials[,d] <- ind_iguales * poblacion[,d] + ind_mutados * mutados[,d]
        }
    } 
    ##               CALCULO FITNESS TRIALS
    ##--------------------------------------------------------
    ##Que inicie por u indica que pertenece a los trials y no a poblacion:
    ufitness <- -evaluadora(trials)
-   ## Calculamos ufitness_w:
-   ## ----> primer termino (mantenemos el valor de alpha)
-   fmin <- min(ufitness)
-   fmax <- max(ufitness)
-   ter1 <- alpha * (fitness - fmin) / (fmax - fmin)
-   ## ----> segundo termino
-   xbest <- trials[ufitness == fmax,]
-   xbest <- matrix(rep(xbest, each=sizePoblacion),nrow=sizePoblacion)
-   ##Calculamos distancias y guardamos la mayor de ellas
-   print(NCOL(xbest))
-   print(NCOL(trials))
-   distancias <- rowSums( (xbest - trials) * (xbest - trials) )
-   Dmax <- max(distancias)
-   ##Calculamos el segundo termino
-   ter2 <- (1 - alpha) * (Dmax - distancias)/(Dmax + distancias)
-   ufitness_w <- ter1 + ter2
+   ufitness_w <- fitness_ponderada(trials, ufitness, alpha)
    ##               SELECCION DE TRIALS
    ##--------------------------------------------------------
-   change <- ufitness < fitness | ( ufitness_w <= ufitness & poblacion != poblacion[1,] )
-   poblacion[change,] <- trials[change,]
-   NSG <- sum( change )   
+   NSG <- 0
+   for (ind in 1:sizePoblacion){
+    change <- ufitness[ind] < fitness[ind] | ( ufitness_w[ind] <= fitness_w[ind] & ind != 1 )
+    if (change){
+        NSG <- NSG + 1
+        poblacion[ind] <- trials[ind]
+    }
+   }
+   #change <- ufitness < fitness | ( ufitness_w <= fitness_w & poblacion != poblacion[1,] )
+   #poblacion[change] <- trials[change]
+   #NSG <- sum( change[,1] )   
  }
 
 
