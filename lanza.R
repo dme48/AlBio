@@ -2,6 +2,7 @@
 #Cargamos las funciones necesarias, genetico.R, mutacionUniforme.R, etc.
 setwd("~/Documents/Zaragoza/AB/Trabajo Evolucion Diferencial/Scripts")
 source("genetico.R")
+source("genera_trials.R")
 source("mutacion.R")         #define una función llamada mutacion()
 source("fitness_ponderado.R")          #Calcula fitness_w
 source("seleccion_trials.R")          #Calcula fitness_w
