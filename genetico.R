@@ -66,7 +66,9 @@ genetico <- function(semilla=9876543,m,GMAX=50,fichero="result.txt",problema="Ea
    ufitness_w <- fitness_ponderada(trials, ufitness, alpha)
 
    ## Seleccionamos individuos entre la poblacion y los trials para la nueva generacion.
-   poblacion <- selecciona(poblacion, trials, fitness, ufitness, fitness_w, ufitness_w)
+   aux <- selecciona(poblacion, trials, fitness, ufitness, fitness_w, ufitness_w)
+   poblacion <- aux$pob
+   NSG <- aux$NSG
  }
 
 

@@ -20,6 +20,7 @@ selecciona <- function(poblacion, trials, fitness, ufitness, fitness_w, ufitness
     #change <- ufitness < fitness | ( ufitness_w <= fitness_w & poblacion != poblacion[1,] )
     #poblacion[change] <- trials[change]
     #NSG <- sum( change[,1] )   
-    return(poblacion)
+    aux <- list("pob" = poblacion, "NSG" = NSG)
+    return(aux)
     }
 }
