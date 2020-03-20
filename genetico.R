@@ -1,5 +1,6 @@
 genetico <- function(semilla=9876543,m,GMAX=50,fichero="result.txt",problema="Easom")
 {
+  ## Carga de parametros
   info<-inicia(problema)
   n <- info$n                                             #número de variables
   l <- info$l;                                            #cotas inferiores de las variables
@@ -16,7 +17,7 @@ genetico <- function(semilla=9876543,m,GMAX=50,fichero="result.txt",problema="Ea
   ##Poblacion es una matriz de m x n (individuos * variables) elementos.
   poblacion <- matrix(NA,m, n)   #creando matriz para almacenar poblacion
  
-  ##La inicializacion de la poblacion concuerda con la del paper, aleatoria entre l y u
+  ##Inicializamos la población con valores random uniformes entre u y l
   for(i in 1:n){
     poblacion[,i] <- runif(m, l[i], u[i])
   }
@@ -25,8 +26,10 @@ genetico <- function(semilla=9876543,m,GMAX=50,fichero="result.txt",problema="Ea
   ##Inicializamos F2 a 0.5
   F2 <- 0.5
   ##Inicializamos NSG (offspring que pasa a nueva generacion) a m
+  ## (el total de la poblacion)
   NSG <- m
-  ##G es "G" en el paper
+  
+  ## Iteramos GMAX generaciones:
  for(G in 1:GMAX){                           #desde 0 a GMAX, GMAX poblaciones
    t <- G / ( GMAX + 1)
    ##Calculamos el alpha para esta iteracion
@@ -45,17 +48,15 @@ genetico <- function(semilla=9876543,m,GMAX=50,fichero="result.txt",problema="Ea
    fitness_w <- fitness_ponderada(poblacion, fitness, alpha)
 
 
-   ##Mutamos, generando una nueva generacion de individuos
+   ##Generamos una mutacion de todos los genes de todos los individuos
    mutados <- mutacion(poblacion, fitness, l, u, t, NSG)
    ##Calculamos el CR de cada individuo
    ##CR es la probabilidad de que se hereden mutaciones en el "trial individual"
    CR <- 1 - orden_fitness / m
-   print(CR)
    altos <- CR > 0.95
    bajos <- CR < 0.05
    CR[altos] <- 0.95
    CR[bajos] <- 0.05
-   print(CR)
 
    ## Generamos los trials a partir de la población y los mutados
    trials <- genera_trials(poblacion, mutados, CR)
