@@ -1,4 +1,4 @@
-genetico <- function(semilla=9876543,m,numIteraciones=50,fichero="result.txt",problema="Easom")
+genetico <- function(semilla=9876543,m,GMAX=50,fichero="result.txt",problema="Easom")
 {
   info<-inicia(problema)
   n <- info$n                                             #número de variables
@@ -11,7 +11,7 @@ genetico <- function(semilla=9876543,m,numIteraciones=50,fichero="result.txt",pr
   #Información general de la ejecucion, se muestra en la consola.
   cat(sprintf("Procesando problema: %s (%d)\n",problema,n))
   cat(sprintf("Semilla: %d\n",semilla))
-  cat(sprintf("Numero iteraciones: %d\n",numIteraciones))
+  cat(sprintf("Numero iteraciones: %d\n",GMAX))
   ti <- proc.time()                                       #Guardamos comienzo de ejecución
   poblacion <- matrix(NA,m, n)   #creando matriz para almacenar poblacion
  
@@ -25,9 +25,9 @@ genetico <- function(semilla=9876543,m,numIteraciones=50,fichero="result.txt",pr
   F2 <- 0.5
   ##Inicializamos NSG (offspring que pasa a nueva generacion) a m
   NSG <- m
-  ##numIter es "G" en el paper
- for(numIter in 1:numIteraciones){                           #desde 0 a numIteraciones, numIteraciones poblaciones
-   t <- numIter / ( numIteraciones + 1)
+  ##G es "G" en el paper
+ for(G in 1:GMAX){                           #desde 0 a GMAX, GMAX poblaciones
+   t <- G / ( GMAX + 1)
    ##Calculamos el alpha para esta iteracion
    alpha <- rnorm(1, 0.9, 0.05)
    if(alpha > 1) alpha <- 1
@@ -84,7 +84,7 @@ genetico <- function(semilla=9876543,m,numIteraciones=50,fichero="result.txt",pr
  finEjecucion=proc.time()-ti
  fileConn<-file(fichero,open="at")                        #apertura del fichero de resultados
  writeLines(sprintf("%s\t%9d\t%3d\t%4d\t%f\t%f ",         #escribiendo información básica
-                    problema,semilla,m, numIteraciones,max(fitness),finEjecucion[3]), fileConn)
+                    problema,semilla,m, GMAX,max(fitness),finEjecucion[3]), fileConn)
  close(fileConn)                                          #cierre de fichero de resultados
  
  cat(sprintf("Maximo FO =%f\n\n",max(fitness)))             #vfo alcanzado
