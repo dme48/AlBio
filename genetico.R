@@ -42,8 +42,8 @@ genetico <- function(semilla=9876543,sizePoblacion,numIteraciones=50,fichero="re
   poblacion <- matrix(NA,sizePoblacion, sizeCromosoma)   #creando matriz para almacenar poblacion
  
   ##La inicializacion de la poblacion concuerda con la del paper, aleatoria entre l y u
-  for(i in 1:sizePoblacion){
-    poblacion[i,] <- runif(sizeCromosoma, l, u)
+  for(i in 1:sizeCromosoma){
+    poblacion[,i] <- runif(sizePoblacion, l[i], u[i])
   }
   ##Inicializamos el SR a 0:
   SR <- 0
