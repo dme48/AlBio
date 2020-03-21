@@ -13,8 +13,7 @@
 #la definición de la función a optimizar (maximizar), dicha fichero contiene siempre
 #una funcion llamada evaluadora(), por lo que en genetico() no es necesario
 #dar el nombre explicito de la funcion a resolver, basta con llamar a evaluadora()
-inicia <- function(problema)
-{
+inicializador <- function(problema) {
   info <- NULL
   switch(problema,      
          Ackley =      {info$n <- 10;  info$l <- rep(-32.768,info$n); info$u <- -info$l;},

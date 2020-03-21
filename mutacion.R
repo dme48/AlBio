@@ -5,23 +5,21 @@
 #
 # El input es:
 #     - population         Lista con la poblacion sobre la que crear las mutaciones.
-#     - L                  Lower bound del problema.
-#     - U                  Upper bounde del problema.
-#     - G                  Iteracion actual.
-#     - Gmax               Numero maximo de iteraciones.
+#     - fitness            Lista ordenada con el fitness de cada individuo.
+#     - l                  Lower bound del problema.
+#     - u                  Upper bounde del problema.
+#     - t                  Cociente G/Gmax, iteración actual/numero max de iteraciones.
 #     - NSG                Numero de indiv que fueron mutados en la iteracion anterior.
 #
 # El output es:
-#     - v                  Lista con los vectores de mutacion sobre la poblacion.
+#     - iguide             El indice del guiding individual.
+#     - v                  Matriz con los vectores de mutacion sobre la poblacion.
 #
 # Dependencias y Observaciones:
-#     - La funcion requiere evaluar la funcion objetivo.
 #     - La poblacion que se parsea tiene que estar ordenada segun la funcion objetivo.
 #     - Esta pensado para un problema de maximizacion. (dependecia en fmin fmax).
 
-MAX_TRY = 10
-
-mutacion <- function(population, fitness, L, U, t, NSG) {
+mutacion <- function(population, fitness, l, u, t, NSG) {
    
    ## Inicializacion de parametros y variables auxiliares.
    v = list()                       # Lista de mutaciones.
@@ -29,8 +27,9 @@ mutacion <- function(population, fitness, L, U, t, NSG) {
    sizepop = length(population[,1]) # Numero de individuos en la poblacion.
    dr2 = rep(0,indlen)              # Vector para la mutacion puramente aleatorio.
    vi = rep(0,indlen)               # Vector de mutacion final.
-   fmin = min(fitness)              # Max de la fun obj en la poblacion.
-   fmax = max(fitness)              # Min de la fun obj en la poblacion.
+   fmin = fitness[1]                # Min de la fun obj en la poblacion.
+   fmax = fitness[sizepop]          # Max de la fun obj en la poblacion.
+   MAX_TRY = 10                     # Num maximo de intentos de los sorteos.
    
    ## Parametros especiales del problema.
    Pt = 1-t**3       # Expresion del maximo indice donde elegir el guiding indiv.
@@ -41,19 +40,19 @@ mutacion <- function(population, fitness, L, U, t, NSG) {
    
    ## Seleccion del guiding individual.
    if(SR < xi3) {
-      top10EliteLim = round(sizepop*0.1)  # indice del ultimo elemento de POPs
+      top10EliteLim = round(sizepop*0.1)  # Indice del ultimo elemento de POPs.
       iguide = sample(1:top10EliteLim, 1)
    } else {
-      topPtEliteLim = round(sizepop*Pt)   # indice del ultimo elemento de POPg
+      topPtEliteLim = round(sizepop*Pt)   # Indice del ultimo elemento de POPg.
       iguide = sample(1:topPtEliteLim, 1)
    }
-   xguide = population[iguide,] #FALTA COMA
+   xguide = population[iguide,]
    fguide = fitness[iguide]
    ## Construccion del vector de mutacion.
-   for(i in 1:sizepop) {
+   for(index in 1:sizepop) {
       # Determinacion del current individual y sus parametros de combinacion.
-      xcur = population[i,] # FALTA UNA COMA
-      fcur = fitness[i]
+      xcur = population[index,]
+      fcur = fitness[index]
       if(fcur > fguide) {
          F1 = (1+((fmax-fguide)/(fmax-fmin)))/2
       }
@@ -74,7 +73,7 @@ mutacion <- function(population, fitness, L, U, t, NSG) {
       k = 0
       while(k <= MAX_TRY) {
          r2 = sample(1:sizepop, 1)
-         if(r2 != i){
+         if(r2 != index){
             break
          }
          k = k+1
@@ -82,7 +81,7 @@ mutacion <- function(population, fitness, L, U, t, NSG) {
       k = 0
       while(k <= MAX_TRY) {
          r1 = sample(1:sizepop, 1)
-         if(r1 != i && r1 != r2) {
+         if(r1 != index && r1 != r2) {
             break
          }
          k = k+1
@@ -90,19 +89,19 @@ mutacion <- function(population, fitness, L, U, t, NSG) {
       if(k > MAX_TRY) {
          warning(paste0("Tras ", MAX_TRY, " intentos de muestreo,",
                         "no se han conseguido indices diferente de xcur, xr1, xr2."))
-         v[[i]] <- xcur
+         v[[index]] <- xcur
          next
       }
       xr2 = population[r2,]
-      xr1 = population[r1,] # FALTA COMA
+      xr1 = population[r1,]
       
       # Calcula el vector dr2 que interviene en la componente
       # fija de aleatoriedad de la mutacion.
-      for(j in indlen) {
+      for(comp in indlen) {
          if(runif(1, 0, 1) < xi2) {
-            dr2 = L[j]+runif(1, 0, 1)*(U[j]-L[j])
+            dr2 = l[comp]+runif(1, 0, 1)*(u[comp]-l[comp])
          } else { 
-            dr2 = xr2[j]
+            dr2 = xr2[comp]
          }
       }
       
@@ -114,9 +113,9 @@ mutacion <- function(population, fitness, L, U, t, NSG) {
          vi = xcur+F1*(xguide-xcur)+F2*(xr1-dr2)
       }
       
-      v[[i]] = vi
+      v[[index]] = vi
    }
    
    v_matrix = matrix(as.numeric(unlist(vi)), nrow = sizepop, ncol = indlen)
-   return(v_matrix)
+   return(list("Rg" = iguide, "mutationMat" = v_matrix))
 }

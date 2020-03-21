@@ -1,12 +1,11 @@
 # Este fichero se encarga de lanzar la ejecucion de los algoritmos y de guardar la informacion correspondiente
-#Cargamos las funciones necesarias, genetico.R, mutacionUniforme.R, etc.
-setwd("~/Documents/Zaragoza/AB/Trabajo Evolucion Diferencial/Scripts")
-source("genetico.R")
-source("genera_trials.R")
+# Cargamos las funciones necesarias, genetico.R, mutacionUniforme.R, etc.
+source("evolutivo.R")
+source("crossover.R")
 source("mutacion.R")         #define una función llamada mutacion()
-source("fitness_ponderada.R")          #Calcula fitness_w
-source("seleccion_trials.R")          #Calcula fitness_w
-source("inicia.R")                   #inicia el problema a resolver y sus caracteristicas
+source("fitnessPonderado.R")          #Calcula fitness_w
+source("seleccion.R")          #Calcula fitness_w
+source("inicializador.R")                   #inicia el problema a resolver y sus caracteristicas
        
 #Lista de problemas incorporados (se podría ampliar)
 #
@@ -55,7 +54,7 @@ ficheroRes <- "resultados.txt"
 #con el que elaborar las estadisticas que se estimen oportunas
 for (i in problemas){
   for (j in 1:numRepeticiones){  
-   genetico(semilla[j], sizePopulation,numIteraciones,ficheroRes,prob[i])
+    evolutivo(semilla[j],prob[i],sizePopulation,numIteraciones,ficheroRes)
   }
 }
 
