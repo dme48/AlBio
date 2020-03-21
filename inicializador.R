@@ -1,18 +1,19 @@
-#Esta función se encarga de establecer la información de los problemas
-#y cargar el script correspondiente a la función
+# Esta funcion se encarga de establecer la información de los problemas
+# y cargar el script correspondiente a la función
 #
-#Los argumentos que recibe son:
+# Los argumentos que recibe son:
 #
 # problema:                   el nombre del problema 
 #
-#deveuelve una lista con la información del problema, la descripción la podéis
-#consultar en :
+# deveuelve una lista con la información del problema, la descripción la podeis
+# consultar en :
 # http://www.sfu.ca/~ssurjano/stybtang.html
 #
-#Además en la parte final de la función se realiza un source() del fichero que contiene
-#la definición de la función a optimizar (maximizar), dicha fichero contiene siempre
-#una funcion llamada evaluadora(), por lo que en genetico() no es necesario
-#dar el nombre explicito de la funcion a resolver, basta con llamar a evaluadora()
+# Además en la parte final de la función se realiza un source() del fichero que contiene
+# la definicien de la función a optimizar (maximizar), dicha fichero contiene siempre
+# una funcion llamada evaluadora(), por lo que en genetico() no es necesario
+# dar el nombre explicito de la funcion a resolver, basta con llamar a evaluadora()
+
 inicializador <- function(problema) {
   info <- NULL
   switch(problema,      
@@ -32,7 +33,6 @@ inicializador <- function(problema) {
          Schaffer4 =   {info$n <-  2;  info$l <- rep(-100,info$n);    info$u <- -info$l;},
          Schwefel =    {info$n <-  5;  info$l <- rep(-500,info$n);    info$u <- -info$l;},
          Shubert =     {info$n <-  2;  info$l <- rep(-5.12,info$n);   info$u <- -info$l;},
-         #
          Bohachevsky1=  {info$n <-  2;  info$l <- rep(-100,info$n);   info$u <- -info$l;},
          Bohachevsky2=  {info$n <-  2;  info$l <- rep(-100,info$n);   info$u <- -info$l;},
          Bohachevsky3=  {info$n <-  2;  info$l <- rep(-100,info$n);   info$u <- -info$l;},
@@ -43,25 +43,19 @@ inicializador <- function(problema) {
          Sumpow=        {info$n <-  10; info$l <- rep(-1,info$n);     info$u <- -info$l;},
          Sumsqu=        {info$n <-  10; info$l <- rep(-10,info$n);    info$u <- -info$l;},
          Trid=          {info$n <-  6;  info$l <- rep(-info$n^2,info$n);   info$u <- -info$l;},
-         #Trid=         {info$n <-  10; info$l <- rep(-info$n^2,info$n); info$u <- -info$l;}
          Booth=         {info$n <-  2;  info$l <- rep(-10,info$n);    info$u <- -info$l;},
          Matyas=        {info$n <-  2;  info$l <- rep(-10,info$n);    info$u <- -info$l;},
          Mccormick=     {info$n <-  2;  info$l <- c(-1.5,-3);         info$u <- c(4,4);},
          Powersum=      {info$n <-  4;  info$l <- rep(0,info$n);      info$u <- rep(info$n,info$n);},
          Zakharov =     {info$n <-  2;  info$l <- rep(-5,info$n);     info$u <-rep(10,info$n);},
-         #
          Camel3 =       {info$n <-  2;  info$l <- rep(-5,info$n);     info$u <- -info$l;},
          Camel6 =       {info$n <-  2;  info$l <- c(-3,-2);           info$u <- -info$l;},
          DixonPrice =   {info$n <-  5;  info$l <- rep(-10,info$n);    info$u <- -info$l;},
          Rosenbrock1 =  {info$n <-  5; info$l <- rep(-5,info$n);      info$u <- rep(10,info$n);},
          Rosenbrock2 =  {info$n <-   4; info$l <- rep(0,info$n);      info$u <- rep(1,info$n);},
-         #
          DeJong5 =      {info$n <-   2; info$l <- rep(-65.536,info$n);info$u <- -info$l;},
          Easom =        {info$n <-   2; info$l <- rep(-100,info$n);   info$u <- -info$l;},
-         #Michalewicz =  {info$n <-   2; info$l <- rep(0,info$n);      info$u <- rep(pi,info$n);},
-         #Michalewicz =  {info$n <-   5; info$l <- rep(0,info$n);      info$u <- rep(pi,info$n);},
          Michalewicz =  {info$n <-   10; info$l <- rep(0,info$n);      info$u <- rep(pi,info$n);},
-         #
          Beale =        {info$n <-    2; info$l <- rep(-4.5,info$n);   info$u <- rep(pi,info$n);},
          Branin1 =      {info$n <-    2; info$l <- c(-5,0);            info$u <- c(10,15);},
          Branin2 =      {info$n <-    2; info$l <- c(-5,0);            info$u <- c(10,15);},
@@ -76,7 +70,6 @@ inicializador <- function(problema) {
          Powell=        {info$n <-    5; info$l <- rep(-4,info$n);     info$u <-  rep(5,info$n)},
          Shekel=        {info$n <-    4; info$l <- rep(0,info$n);      info$u <- rep(10,info$n);},
          StyblinskiTang={info$n <-   15; info$l <- rep(-5,info$n);     info$u <- -info$l;}
-         
   )
 
   source(paste("funciones/",problema,".R",sep=""))

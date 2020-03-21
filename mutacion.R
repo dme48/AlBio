@@ -17,7 +17,7 @@
 #
 # Dependencias y Observaciones:
 #     - La poblacion que se parsea tiene que estar ordenada segun la funcion objetivo.
-#     - Esta pensado para un problema de maximizacion. (dependecia en fmin fmax).
+#     - Esta pensado para un problema de minimizacion.
 
 mutacion <- function(population, fitness, l, u, t, NSG) {
    

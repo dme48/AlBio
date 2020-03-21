@@ -1,9 +1,19 @@
+# Orquestra todas las componentes del algoritmo genetico: mutacion, crossover
+# y seleccion de padres, además de la evaluacion de la fun obj y la ordenacion
+# de la poblacion en base a fun obj para el ranking.
 #
+# El input es:
+#     - seedE         Semilla para generar mismos parámetros aleatorios por ejecucion.
+#     - problem       Problema a resolver.
+#     - sizepop       Tamano maximo de la poblacion.
+#     - GMAX          Numero maximo de iteraciones.
+#     - fileE         Fichero para escribir la salida de datos.
 #
-# MISSING
-# Algoritmo diseñado para maximizar
+# El output es:
+#     - NA
 #
-
+# Dependencias y Observaciones:
+#     - Esta pensado para un problema de minimizacion.
 
 evolutivo <- function(seedE, problem, sizepop, GMAX, fileE) {
   
@@ -33,68 +43,64 @@ evolutivo <- function(seedE, problem, sizepop, GMAX, fileE) {
     population[,i] = runif(sizepop, l[i], u[i])
   }
   
-  ## HASTA AQUI
-  
-  ## Iteramos GMAX generaciones:
- for(G in 1:GMAX){                           #desde 0 a GMAX, GMAX generaciones
+  ## Iteramos hasta GMAX generaciones.
+  for(G in 1:GMAX) {
+     
+   # Calculamos los parametros t y alpha.
    t = G/(GMAX+1)
-   # Calculamos el alpha para esta iteracion
    alpha = rnorm(1, 0.9, 0.05)
    if(alpha > 1) alpha = 1
    if(alpha < 0.8) alpha = 0.8
-   # Calculamos fitness
+   
+   # Calculamos fitness.
    # La funcion evaluadora devuelve la funcion objetivo de un problema de maximo.
-   # El algoritmo es de un problema de minimos.
+   # El algoritmo es de un problema de minimos por lo que cambiamos el signo.
    fitness = -evaluadora(population)
 
-   ## Ordenamos poblacion y fitness por fitness creciente, ya
-   ## que queremos minimizar fitness
-   aux <- sort(fitness, decreasing = FALSE, index.return = TRUE)
-   fitness <- aux$x
-   orden_fitness <- aux$ix
-   population <- population[orden_fitness,] # Ordena la pob por fitness.
-   rm(orden_fitness) # Eliminamos ya que la pob ya esta ordenada por fitness
+   ## Ordenamos poblacion y fitness por fitness decreciente, ya que queremos
+   ## la poblacion con fun obj mas baja en los primeros puestos para el ranking.
+   aux = sort(fitness, decreasing = FALSE, index.return = TRUE)
+   fitness = aux$x
+   orden_fitness = aux$ix
+   population = population[orden_fitness,] # Ordena la poblacion por fitness.
+   rm(orden_fitness) # Eliminamos ya que la poblacion ya esta ordenada por fitness.
    
-   
-   ## Calculamos la fitness ponderada:
+   # Calculamos la fitness ponderado.
    fitness_w <- fitnessPonderado(population, fitness, alpha)
-   #print(fitness_w)
 
-   ##Generamos una mutacion de todos los genes de todos los individuos
+   # Generamos una mutacion de todos los genes de todos los individuos.
    mutationOut = mutacion(population, fitness, l, u, t, NSG)
-   Rg = mutationOut[["Rg"]] # Indice del guiding individual en la pob ordenada
-   mutationMat = mutationOut[["mutationMat"]]
+   Rg = mutationOut[["Rg"]] # Indice del guiding individual en el ranking de poblacion ordenada,
+   mutationMat = mutationOut[["mutationMat"]] # Matriz con las mutaciones para los padres.
    
-   ## Calculamos el CR de cada individuo
-   ## CR es la probabilidad de que se hereden mutaciones en el "trial individual"
-   CR = 1-Rg/sizepop
+   # Calculamos el CR de cada individuo
+   CR = 1-Rg/sizepop # CR es la prob que los padres tengan mutaciones.
    if(CR < 0.05) CR = 0.05
    if(CR > 0.95) CR = 0.95
    
-   ## Generamos los trials a partir de la población y los mutados
-   trialIndividuals <- crossover(population, mutationMat, CR)
+   # Generamos los trials (padres mutados) a partir de la población de padres y la matriz de mutacion.
+   trialIndividuals = crossover(population, mutationMat, CR)
 
-   ## Calculamos el fitness y fitness ponderado de los trials.
+   # Calculamos el fitness y fitness ponderado de los trials (nuevos padres mutados).
    ufitness = -evaluadora(trialIndividuals)
    ufitness_w = fitnessPonderado(trialIndividuals, ufitness, alpha)
 
-   ## Seleccionamos individuos entre la poblacion y los trials para la nueva generacion.
+   # Seleccionamos los mejores individuos entre el padre y su trial para la nueva generacion.
    seleccionOut = seleccion(population, trialIndividuals, fitness, ufitness, fitness_w, ufitness_w)
    population = seleccionOut[["population"]]
    NSG = seleccionOut[["NSG"]]
 
-   ## CRITERIO DE PARADA
+   ## CRITERIO DE PARADA TBD
  }
 
 
  finEjecucion = proc.time()-ti
- #print(finEjecucion)
  fileConn <- file(fileE,open="at")                        #apertura del fichero de resultados
  writeLines(sprintf("%s\t%9d\t%3d\t%4d\t%f\t%f ",         #escribiendo información básica
                     problem,seedE,sizepop, GMAX,max(fitness),finEjecucion[3]), fileConn)
  close(fileConn)                                          #cierre de fichero de resultados
  
- cat(sprintf("Maximo Fun Obj = %f\n\n",max(fitness)))             #vfo alcanzado
+ cat(sprintf("Maximo Fun Obj = %f\n\n",max(fitness)))     #vfo alcanzado
  cat(sprintf("X(%d)= %8.6f ",1:length(l),population[which.max(fitness),]))
  cat("\n\n")
  

@@ -1,16 +1,24 @@
-##Definimos la funcion fitness ponderada. "ind" son los individuos a evaluar
-## y fun_fitness es la funcion del fitness original. alpha es un valor rand
-## calculado en genetico.R. El alpha utilizado tiene que ser el mismo cuando
-##fitness_ponderada se calcula sobre los padres y sobre los trials.
-
-# Dependencia de la poblacion ordenada.
+# Esta funcion se encarga de calcular el fitnes ponderado.
+#
+# El input es:
+#     - population         Lista con la poblacion sobre la que crear las mutaciones.
+#     - fitness            Lista ordenada con el fitness de cada individuo.
+#     - alpha              Peso de los terminos.
+#
+# El output es:
+#     - term1+term2   Poblacion mutada a evaluar.
+#
+# Dependencias y Observaciones:
+#     - La poblacion que se parsea tiene que estar ordenada segun la funcion objetivo.
+#     - Esta pensado para un problema de minimizacion.
 
 fitnessPonderado <- function(population, fitness, alpha) {
-    ## Definimos las dimensiones de poblacion:
+    
+    ## Inicializa las dimensiones.
     indlen = length(population[1,])  # Longitud de los individuos.
     sizepop = length(population[,1]) # Numero de individuos en la poblacion.
-    ## PRIMER TERMINO
-    ##-------------------------
+    
+    ## Calculo del primer termino.
     fmin = fitness[1]                # Min de la fun obj en la poblacion.
     fmax = fitness[sizepop]          # Max de la fun obj en la poblacion.
     if((fmax-fmin) > .Machine$double.eps) {
@@ -18,16 +26,12 @@ fitnessPonderado <- function(population, fitness, alpha) {
     } else {
         term1 = rep(0,sizepop)
     }
-    ## SEGUNDO TERMINO
-    ##-------------------------
-    ##Buscamos la posición del individuo con menor fitness
+    
+    ## Calculo del segundo termino.
     xbest = population[1,]
-    ##Creamos una matriz en la que se repite el mejor de los individuos:
     xbestMat = matrix(rep(xbest, each=sizepop), nrow=sizepop)
-    ##Calculamos distancias y guardamos la mayor de ellas
     dist = rowSums((xbestMat-population)*(xbestMat-population))
     Dmax = max(dist)
-    ##guardamos el segundo termino
     if((Dmax + min(dist)) > .Machine$double.eps) {
         term2 = (1 - alpha) * (Dmax - dist)/(Dmax + dist)
     } else {
