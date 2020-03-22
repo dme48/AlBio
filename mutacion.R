@@ -43,7 +43,7 @@ mutacion <- function(population, fitness, l, u, t, NSG) {
       top10EliteLim = round(sizepop*0.1)  # Indice del ultimo elemento de POPs.
       iguide = sample(1:top10EliteLim, 1)
    } else {
-      topPtEliteLim = round(sizepop*Pt)   # Indice del ultimo elemento de POPg.
+      topPtEliteLim = max(round(sizepop*Pt),1)   # Indice del ultimo elemento de POPg.
       iguide = sample(1:topPtEliteLim, 1)
    }
    xguide = population[iguide,]

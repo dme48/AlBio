@@ -26,7 +26,7 @@ semilla <- c( 352668,  628434,  492990,  528643,  477348,  855426,  570702,  957
 
 #Parametros de ejecucion, que deberan fijarse de acuerdo a vuestro experimento.
 
-numRepeticiones <- 5    # cuantas veces se resuelve cada problema.
+numRepeticiones <- 20    # cuantas veces se resuelve cada problema.
 sizePopulation <- 100   # tamano de la población ##NP en el paper.
 numIteraciones <- 1000  # numero de iteraciones del algoritmo ## en el paper G_max.
 
