@@ -100,7 +100,7 @@ evolutivo <- function(seedE, problem, sizepop, GMAX, fileE) {
                     problem,seedE,sizepop, GMAX,max(fitness),finEjecucion[3]), fileConn)
  close(fileConn)                                          #cierre de fichero de resultados
  
- cat(sprintf("Maximo Fun Obj = %f\n\n",max(fitness)))     #vfo alcanzado
+ cat(sprintf("Minimo Fun Obj = %f\n\n",min(fitness)))     #vfo alcanzado
  cat(sprintf("X(%d)= %8.6f ",1:length(l),population[which.max(fitness),]))
  cat("\n\n")
  
