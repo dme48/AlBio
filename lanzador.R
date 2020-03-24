@@ -26,7 +26,7 @@ semilla <- c( 352668,  628434,  492990,  528643,  477348,  855426,  570702,  957
 
 #Parametros de ejecucion, que deberan fijarse de acuerdo a vuestro experimento.
 
-numRepeticiones <- 20    # cuantas veces se resuelve cada problema.
+numRepeticiones <- 25    # cuantas veces se resuelve cada problema.
 sizePopulation <- 100   # tamano de la población ##NP en el paper.
 numIteraciones <- 1000  # numero de iteraciones del algoritmo ## en el paper G_max.
 
@@ -36,7 +36,7 @@ numIteraciones <- 1000  # numero de iteraciones del algoritmo ## en el paper G_m
 # Los diez últimos problemas <- 44:53
 # Unos cuantos problemas <- c(1,3,7,9,12,22,34)
 
-problemas<-c(1) # De momento solo Ackley.
+problemas<-c(1:10) # Resolvemos problemas desde el 1 al 10
 
 # Nombre del fichero en el que se almacenan los resultados. 
 # Si no existe lo crea y copia los resultados,
