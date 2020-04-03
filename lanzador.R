@@ -36,7 +36,7 @@ numIteraciones <- 1000  # numero de iteraciones del algoritmo ## en el paper G_m
 # Los diez últimos problemas <- 44:53
 # Unos cuantos problemas <- c(1,3,7,9,12,22,34)
 
-problemas<-c(1:10) # Resolvemos problemas desde el 1 al 10
+problemas<-c(46:53) # Resolvemos problemas desde el 1 al 10
 
 # Nombre del fichero en el que se almacenan los resultados. 
 # Si no existe lo crea y copia los resultados,
