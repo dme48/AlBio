@@ -16,6 +16,35 @@
 \section{Introducción}
 En este trabajo hemos implementado el algoritmo diferencial desarrollado en el paper de Tian, Gao y Dai\cite{mainPaper}. Una de las principales características de este algoritmo es la capacidad de autogestión y adaptabilidad a la hora de elegir entre diversidad y convergencia.
 
+A continuación describimos los mecanismos de mutación y recombinación, pasando por alto detalles más concretas del algoritmo como el cálculo de $F_1$ o $\vec{d}_{r2, G}$.
+\subsection{Mutación}
+Los individuos mutados se generan mediante la siguiente fórmula:
+\begin{equation}
+    \vec{v}_{i,G} = \left\{\begin{array}{ll}
+            \vec{x}_{\text{rand},G} + F_1(\vec{x}_{g,G}-\vec{x}_{\text{rand}, G})+ F_2(\vec{x}_{r1,G}-\vec{d}_{r2, G})&\text{si rand}<\xi_1\\
+            \vec{x}_{\text{cur},G} + F_1(\vec{x}_{g,G}-\vec{x}_{\text{cur}, G})+ F_2(\vec{x}_{r1,G}-\vec{d}_{r2, G})&\text{caso contrario}
+    \end{array}\right.
+\label{ec_mutacion}
+\end{equation}
+Donde las variables tienen el siguiente significado:
+\begin{itemize}
+    \item $\xi_1$: Constante definida por el usuario, $\le1$.
+    \item rand: Variable aleatoria con probabilidad uniforme entre 0 y 1.
+    \item $G$: Generación a la que pertenecen los individuos.
+    \item $\vec{v}_{i,G}$: Individuo mutado.
+    \item $\vec{x}_{\text{cur},G}$: Individuo a mutar.
+    \item $F_1,\ F_2$: Constantes determinadas por el fitness.
+    \item $\vec{x}_{\text{rand},G}$: Individuo seleccionado al azar.
+    \item $\vec{x}_{g,G}$: \textit{Guiding individual}. Individuo seleccionado al azar entre los individuos con mejor \textit{fitness}.
+    \item $\vec{d}_{r2,G}$ es un vector aleatorio dentro del espacio de búsqueda.
+\end{itemize}
+La predisposición hacia la convergencia o la diversidad viene dada por el valor que demos a $\xi_1$.
+
+El primer término favorece la convergencia: ``sustituye'' la posición del individuo original por uno aleatorio, forzando que los puntos se mantengan donde está la mayoría.
+
+El segundo término favorece la exploración: ``mantiene'' la posición original y luego le suma dos perturbaciones: una que lo lleva hacia el \textit{guiding individual} y otra aleatoria.
+
+Nótese que no se están redifiniendo las posiciones de la población original, denotada por $\vec{x}$, sino definiendo una nueva población mutada $\vec{v}$.
 \section{Estructura del programa}
 Para escribir el programa hemos modificado bastante el programa inicial dado en clase. El programa se sigue llamando desde \texttt{lanzador.R}, que inicializa el problema mediante las funciones del directorio \texttt{funciones} y el script \texttt{inicia.R} (aunque este ha sido renombrado como \texttt{inicializador.R}).
 
