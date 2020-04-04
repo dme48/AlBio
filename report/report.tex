@@ -14,5 +14,17 @@
 \begin{document}
 \maketitle
 \section{Introducción}
+En este trabajo hemos implementado el algoritmo diferencial desarrollado en el paper de Tian, Gao y Dai\cite{mainPaper}. Una de las principales características de este algoritmo es la capacidad de autogestión y adaptabilidad a la hora de elegir entre diversidad y convergencia.
 
+\section{Estructura del programa}
+Para escribir el programa hemos modificado bastante el programa inicial dado en clase. El programa se sigue llamando desde \texttt{lanzador.R}, que inicializa el problema mediante las funciones del directorio \texttt{funciones} y el script \texttt{inicia.R} (aunque este ha sido renombrado como \texttt{inicializador.R}).
+
+A partir de aquí los scripts se han directamente sustituido o eliminado. Una vez inicializado el problema, \texttt{lanzador.R} llama a \texttt{evolutivo.R}. Este es el script central del programa, y se encargará de llevar a cabo todos los pasos descritos en el paper de Tian, Gao y Dai\cite{mainPaper}. Para ello hará uso de los siguientes scripts:
+\begin{itemize}
+    \item \texttt{mutacion.R}: este script recibe como argumento una población de individuos y genera una población mutada, sin modificar la población original.
+    \item \texttt{crossover.R}: este script toma la población original y la mutada mediante \texttt{mutacion.R} y las combina generando un individuo \textit{trial}, en base a la variable \textit{CR}, que determina la probabilidad de un individuo de mutar. El \textit{trial} generado es un individuo que puede tener componentes tanto del individuo original como del individuo mutado.
+    \item \texttt{seleccion.R}: este script selecciona los individuos eligiendo entre los individuos originales o los \textit{trials}. Para ello tiene en cuenta el \textit{fitness} de los individuos.
+\end{itemize}
+\bibliography{bibliografia}{}
+\bibliographystyle{ieeetr}
 \end{document}
