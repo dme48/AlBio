@@ -36,24 +36,77 @@ Donde las variables tienen el siguiente significado:
     \item $F_1,\ F_2$: Constantes determinadas por el fitness.
     \item $\vec{x}_{\text{rand},G}$: Individuo seleccionado al azar.
     \item $\vec{x}_{g,G}$: \textit{Guiding individual}. Individuo seleccionado al azar entre los individuos con mejor \textit{fitness}.
-    \item $\vec{d}_{r2,G}$ es un vector aleatorio dentro del espacio de búsqueda.
+    \item $\vec{d}_{r2,G}$ Vector aleatorio dentro del espacio de búsqueda.
 \end{itemize}
 La predisposición hacia la convergencia o la diversidad viene dada por el valor que demos a $\xi_1$.
 
-El primer término favorece la convergencia: ``sustituye'' la posición del individuo original por uno aleatorio, forzando que los puntos se mantengan donde está la mayoría.
-
+El primer término favorece la convergencia: ``sustituye'' la posición del individuo original por uno aleatorio, forzando que los puntos se mantengan donde está la mayoría.  
 El segundo término favorece la exploración: ``mantiene'' la posición original y luego le suma dos perturbaciones: una que lo lleva hacia el \textit{guiding individual} y otra aleatoria.
 
-Nótese que no se están redifiniendo las posiciones de la población original, denotada por $\vec{x}$, sino definiendo una nueva población mutada $\vec{v}$.
+Nótese que no se están redefiniendo las posiciones de la población original, denotada por $\vec{x}$, sino definiendo una nueva población mutada $\vec{v}$.
+\subsection{Crossover}
+Mediante el \textit{crossover} generamos individuos que comparen características entre la población inicial y la población mutada. Lo primero que hacemos es definir la probabilidad CR de que un individuo de la siguiente generación herede características del individuo mutado.
+\begin{equation}
+    \text{CR} = 1 - \frac{R_g}{\text{NP}}
+    \label{ec_CR}
+\end{equation}
+Con
+\begin{itemize}
+    \item NP: Número total de individuos.
+    \item $R_g$: \textit{Ranking} del \textit{Guiding individual}. Si el \textit{guiding individual} es el mejor individuo $R_g=1$, si es el segundo mejor $R_g=2$, etc.
+\end{itemize}
+Si nos fijamos en la ec.\eqref{ec_mutacion} vemos que los individuos mutados tienen tendencia a acercarse al \textit{guiding individual}. El \textit{crossover} explota esto otorgando una CR alta cuando el \textit{fitness} del \textit{guiding individual} es mejor ($R_g$ pequeño).
+
+Una vez calculada la probabilidad de mutación CR generamos un \textit{trial} a partir de cada par individuo original - individuo mutado. Hacemos que el \textit{trial} $u_{i,G}$ herede componentes de la población mutada en función del CR:
+\begin{equation}
+    u_{i,G}^j = \left\{\begin{array}{ll}
+        v_{i,G}^j&\text{si rand}\le\text{CR ó randn}(i)=j\\
+        x_{i,G}^j&\text{otro caso}
+        \end{array}\right.
+    \label{ec_crossover}
+\end{equation}
+Donde el superíndice $j$ denota la $j$-ésima componente. 
+\begin{itemize}
+    \item randn$(i)$: Entero aleatorio entre 1 y $D$, siendo $D$ el número de componentes de $x, v, u$.
+\end{itemize}
+La condición randn$(i)=j$ asegura que al menos una componente (la componente número rand$(i)$) sea mutada. Nótese que para problemas de una única dimensión esta condición siempre se cumple y los \textit{trials} son idénticos a la población mutada.
+\subsection{Selección}
+En esta parte del algoritmo se elige al individuo de la generación $G+1$, eligiendo para ello entre el individuo de la generación $G$ y el trial generado a partir de él.
+
+Para efectuar esta selección se define previamente un fitness ponderado:
+\begin{equation}
+    f_w(x_{i,G}) = \alpha\frac{f(x_{i,G}) - f_\text{min}}{f_\text{max} - f_\text{min}} + (1-\alpha)\frac{\text{Dis}_\text{max} - \text{Dis}(x_{i,G}, x_{best,G})}{\text{Dis}_\text{max} + \text{Dis}(x_{i,G}, x_{best,G})}
+    \label{ec_fitness_ponderado}
+\end{equation}
+Con
+\begin{itemize}
+    \item $f_w$: Función \textit{fitness} ponderada.
+    \item $f, f_\text{min}, f_\text{max}$: Función \textit{fitness} del problema a resolver; el mínimo y el máximo valor de esta función para la población de la generación $G$.
+    \item $\alpha$: Variable aleatoria entre 0.8 y 1.
+    \item Dis, Dis$_\text{max}$: Función que devuelve la distancia euclídea entre dos puntos; la máxima de estas distancias para la generación actual.
+    \item $x_{\text{best}, G}$: Individuo con mejor \textit{fitness} en la generación $G$.
+\end{itemize}
+La función fitness ponderada introduce una penalización por alejarse del individuo con mejor \textit{fitness}.
+
+El método de selección es esencialmente comparar ambos los \textit{fitness} de el individuo original y el trial. Si el trial supera al original el individuo es sustituido por el trial.
+\begin{equation}
+    \vec{x}_{i,G+1} = \left\{\begin{array}{cl}
+            \vec{u}_{i,G}&\text{si }f(\vec{u}_{i,G})<f(\vec{x}_{i,G})\\
+            \vec{u}_{i,G}&\text{si }f(\vec{u}_{i,G})\le f(\vec{x}_{i,G})\text{ y }x_{i, G}\neq x_{\text{best}, G}\\
+            \vec{x}_{i,G}&\text{otro caso}
+        \end{array}\right.
+\label{ec_seleccion}
+\end{equation}
+Hacemos una excepción para el individuo con el mejor \textit{fitness}, $x_{\text{best},G}$, que siempre pasa a la siguiente generación.
 \section{Estructura del programa}
 Para escribir el programa hemos modificado bastante el programa inicial dado en clase. El programa se sigue llamando desde \texttt{lanzador.R}, que inicializa el problema mediante las funciones del directorio \texttt{funciones} y el script \texttt{inicia.R} (aunque este ha sido renombrado como \texttt{inicializador.R}).
 
-A partir de aquí los scripts se han directamente sustituido o eliminado. Una vez inicializado el problema, \texttt{lanzador.R} llama a \texttt{evolutivo.R}. Este es el script central del programa, y se encargará de llevar a cabo todos los pasos descritos en el paper de Tian, Gao y Dai\cite{mainPaper}. Para ello hará uso de los siguientes scripts:
-\begin{itemize}
+A partir de aquí los scripts se han directamente sustituido o eliminado. Una vez inicializado el problema, \texttt{lanzador.R} llama a \texttt{evolutivo.R}. Este es el script central del programa, y se encargará de llevar a cabo todos los pasos descritos en el paper\cite{mainPaper}. Para ello hará uso de los siguientes scripts:
+\begin{enumerate}
     \item \texttt{mutacion.R}: este script recibe como argumento una población de individuos y genera una población mutada, sin modificar la población original.
     \item \texttt{crossover.R}: este script toma la población original y la mutada mediante \texttt{mutacion.R} y las combina generando un individuo \textit{trial}, en base a la variable \textit{CR}, que determina la probabilidad de un individuo de mutar. El \textit{trial} generado es un individuo que puede tener componentes tanto del individuo original como del individuo mutado.
     \item \texttt{seleccion.R}: este script selecciona los individuos eligiendo entre los individuos originales o los \textit{trials}. Para ello tiene en cuenta el \textit{fitness} de los individuos.
-\end{itemize}
+    \end{enumerate}
 \bibliography{bibliografia}{}
 \bibliographystyle{ieeetr}
 \end{document}
