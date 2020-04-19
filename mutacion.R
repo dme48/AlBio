@@ -8,7 +8,7 @@
 #     - fitness            Lista ordenada con el fitness de cada individuo.
 #     - l                  Lower bound del problema.
 #     - u                  Upper bounde del problema.
-#     - t                  Cociente G/Gmax, iteración actual/numero max de iteraciones.
+#     - t                  Cociente G/Gmax, iteracion actual/numero max de iteraciones.
 #     - NSG                Numero de indiv que fueron mutados en la iteracion anterior.
 #
 # El output es:

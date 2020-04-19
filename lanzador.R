@@ -10,7 +10,7 @@ source("crossover.R")
 source("seleccion.R")
 
 
-# Lista de problemas incorporados (se podría ampliar).
+# Lista de problemas incorporados (se podria ampliar).
 prob <- c("Ackley", "Bukin6", "CrossInTray", "DropWave" ,"Eggholder" ,"GramacyLee12","Griewank","HolderTable",
           "Langermann","Levy" ,"Levy13", "Rastrigin","Schaffer2","Schaffer4","Schwefel","Shubert","Bohachevsky1","Bohachevsky2",
           "Bohachevsky3","Perm0db","Rothyp","Sphere","Sphere2","Sumpow","Sumsqu","Trid","Booth","Matyas","Mccormick","Powersum",
@@ -27,27 +27,27 @@ semilla <- c( 352668,  628434,  492990,  528643,  477348,  855426,  570702,  957
 #Parametros de ejecucion, que deberan fijarse de acuerdo a vuestro experimento.
 
 numRepeticiones <- 25    # cuantas veces se resuelve cada problema.
-sizePopulation <- 100   # tamano de la población ##NP en el paper.
+sizePopulation <- 100   # tamano de la poblacion ##NP en el paper.
 numIteraciones <- 1000  # numero de iteraciones del algoritmo ## en el paper G_max.
 
 # Indicamos que problemas se van a resolver.
 # Todos problemas <- 1:53
 # Los diez primeros problemas <- 1:10
-# Los diez últimos problemas <- 44:53
+# Los diez ultimos problemas <- 44:53
 # Unos cuantos problemas <- c(1,3,7,9,12,22,34)
 
 problemas<-c(46:53) # Resolvemos problemas desde el 1 al 10
 
 # Nombre del fichero en el que se almacenan los resultados. 
 # Si no existe lo crea y copia los resultados,
-# si existe añade los nuevos resultados al contenido previo.
+# si existe anade los nuevos resultados al contenido previo.
 
 ficheroRes <- "resultados.txt"
 
 
 # Loop principal, para cada problema ejecuta el algoritmo de optimizacion
-# numRepeticiones veces, obteniendo una colección de valores de tiempo de
-# ejecución y valor alcanzado con el que elaborar las estadisticas.
+# numRepeticiones veces, obteniendo una coleccion de valores de tiempo de
+# ejecucion y valor alcanzado con el que elaborar las estadisticas.
 #
 for (i in problemas){
   for (j in 1:numRepeticiones){  

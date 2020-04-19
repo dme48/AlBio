@@ -1,16 +1,16 @@
-# Esta funcion se encarga de establecer la información de los problemas
-# y cargar el script correspondiente a la función
+# Esta funcion se encarga de establecer la informacion de los problemas
+# y cargar el script correspondiente a la funcion
 #
 # Los argumentos que recibe son:
 #
 # problema:                   el nombre del problema 
 #
-# deveuelve una lista con la información del problema, la descripción la podeis
+# deveuelve una lista con la informacion del problema, la descripcion la podeis
 # consultar en :
-# http://www.sfu.ca/~ssurjano/stybtang.html
+# http://www.sfu.ca/ssurjano/stybtang.html
 #
-# Además en la parte final de la función se realiza un source() del fichero que contiene
-# la definicien de la función a optimizar (maximizar), dicha fichero contiene siempre
+# Ademas en la parte final de la funcion se realiza un source() del fichero que contiene
+# la definicien de la funcion a optimizar (maximizar), dicha fichero contiene siempre
 # una funcion llamada evaluadora(), por lo que en genetico() no es necesario
 # dar el nombre explicito de la funcion a resolver, basta con llamar a evaluadora()
 

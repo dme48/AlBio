@@ -8,64 +8,147 @@
 \usepackage{amsmath}
 \usepackage{float}
 \usepackage{hyperref}
+
+\usepackage{listings}
+\usepackage{color}
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\lstset{ 
+  language=R,                     % the language of the code
+  basicstyle=\footnotesize,       % the size of the fonts that are used for the code
+  numbers=left,                   % where to put the line-numbers
+  numberstyle=\tiny\color{gray},  % the style that is used for the line-numbers
+  stepnumber=1,                   % the step between two line-numbers. If it's 1, each line
+                                  % will be numbered
+  numbersep=5pt,                  % how far the line-numbers are from the code
+  backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  frame=single,                   % adds a frame around the code
+  rulecolor=\color{black},        % if not set, the frame-color may be changed on line-breaks within not-black text
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  captionpos=b,                   % sets the caption-position to bottom
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  title=\lstname,                 % show the filename of files included with \lstinputlisting;
+                                  % also try caption instead of title
+  keywordstyle=\color{blue},      % keyword style
+  commentstyle=\color{dkgreen},   % comment style
+  stringstyle=\color{mauve},      % string literal style
+  escapeinside={\%*}{*)},         % if you want to add a comment within your code
+  morekeywords={*,...}            % if you want to add more keywords to the set
+} 
+
 \geometry{top=2.0cm, bottom=3.0cm, left=2.5cm, right=2.5cm}
 \title{Algoritmos Bioinspirados: Evolución Diferencial}
 \author{Alberto García y Diego Martínez}
+
 \begin{document}
 \maketitle
-\section{Introducción}
-En este trabajo hemos implementado el algoritmo diferencial desarrollado en el paper de Tian, Gao y Dai\cite{mainPaper}. Una de las principales características de este algoritmo es la capacidad de autogestión y adaptabilidad a la hora de elegir entre diversidad y convergencia.
+En este trabajo hemos implementado la opción T3\_DE, correspondiente al algoritmo de evolución diferencial desarrollado en el artículo de Tian, Gao y Dai \cite{mainPaper}. Este informe contiene en sus secciones, la descripción del algoritmo, un resumen de los problemas a resolver, la estructura y los parámetros del experimento, los resultados y conclusiones, las referencias y un anexo con el código del programa.
 
-A continuación describimos los mecanismos de mutación y recombinación, pasando por alto detalles más concretas del algoritmo como el cálculo de $F_1$ o $\vec{d}_{r2, G}$.
+\section{Descripción del Algoritmo.}
+Este algoritmo es de tipo evolutivo, luego su esquema general será el siguiente. Crearemos un conjunto de \textbf{mutaciones}, haremos un \textbf{crossover} entre la población de padres y las mutaciones para crear una nueva población de hijos, y realizaremos una \textbf{selección} para seleccionar los mejores mejores individuos entre la población de padres e hijos.
+
+En concreto este algoritmo es de evolución diferencial, lo que quiere decir que la estrategia para las mutaciones está basada en diferencias entre individuos. Esto implica que la elección individuos más o menos ``buenos'' para calcular estas diferencias contribuye a que el algoritmo tenga un comportamiento más convergente o más exploratorio. En concreto, este algoritmo tiene un modelo híbrido con algunos parámetros autoadaptativos, de forma que especialmente en las en primeras generaciones y cuando el porcentaje de hijos que suceden a los padres es bajo, los parámetros se adaptan para ofrecer un mayor comportamiento exploratorio.
+
 \subsection{Mutación}
-Los individuos mutados se generan mediante la siguiente fórmula:
+La mutación para cada individuo en una generación se genera con una estrategia rand-to-guiding (exploratoria) o current-to-guiding (convergente), la cual se selecciona por sorteo con una umbral de probabilidad $\xi_1$. A estas estrategias se les añade una segunda componente extra que dependiente de un cierto $\vec{d}_{r2, G}$, el cual pretende añadir un elemento de aleatoriedad a la mutación. La expresión para la mutación queda de la siguiente manera:
 \begin{equation}
     \vec{v}_{i,G} = \left\{\begin{array}{ll}
-            \vec{x}_{\text{rand},G} + F_1(\vec{x}_{g,G}-\vec{x}_{\text{rand}, G})+ F_2(\vec{x}_{r1,G}-\vec{d}_{r2, G})&\text{si rand}<\xi_1\\
-            \vec{x}_{\text{cur},G} + F_1(\vec{x}_{g,G}-\vec{x}_{\text{cur}, G})+ F_2(\vec{x}_{r1,G}-\vec{d}_{r2, G})&\text{caso contrario}
+            \vec{x}_{\text{rand},G} + F_1(\vec{x}_{g,G}-\vec{x}_{\text{rand}, G})+ F_2(\vec{x}_{r1,G}-\vec{d}_{r2, G})&\text{si rand}<\xi_1,\\
+            \vec{x}_{\text{cur},G} + F_1(\vec{x}_{g,G}-\vec{x}_{\text{cur}, G})+ F_2(\vec{x}_{r1,G}-\vec{d}_{r2, G})&\text{caso contrario},
     \end{array}\right.
 \label{ec_mutacion}
 \end{equation}
-Donde las variables tienen el siguiente significado:
+donde las variables son:
 \begin{itemize}
-    \item $\xi_1$: Constante definida por el usuario, $\le1$.
+    \item $\xi_1$: Umbral de probabilidad para la selección de estrategias. (Constante entre 0 y 1)
     \item rand: Variable aleatoria con probabilidad uniforme entre 0 y 1.
-    \item $G$: Generación a la que pertenecen los individuos.
-    \item $\vec{v}_{i,G}$: Individuo mutado.
-    \item $\vec{x}_{\text{cur},G}$: Individuo a mutar.
-    \item $F_1,\ F_2$: Constantes determinadas por el fitness.
-    \item $\vec{x}_{\text{rand},G}$: Individuo seleccionado al azar.
-    \item $\vec{x}_{g,G}$: \textit{Guiding individual}. Individuo seleccionado al azar entre los individuos con mejor \textit{fitness}.
+    \item $G$: Generación del individuo.
+    \item $\vec{v}_{i,G}$: Mutación para el individuo $i$.
+    \item $\vec{x}_{\text{cur},G}$: Individuo $i$ para el que queremos crear la mutación. (Current individual)
+    \item $\vec{x}_{\text{rand},G}$, $\vec{x}_{\text{r1},G}$: Individuos aleatorios. ($\vec{x}_{\text{rand},G}\neq\vec{x}_{\text{cur},G}$, $\vec{x}_{\text{r1},G}\neq\vec{x}_{\text{cur},G}$)
+    \item $\vec{x}_{g,G}$: Individuo seleccionado entre la élite de la generación. (Guiding individual)
+    \item $F_1$: Peso de la estrategia principal. (Parámetro entre 0 y 1)
+    \item $F_2$: Peso de la componente puramente aleatoria. (Constante entre 0 y 1)
     \item $\vec{d}_{r2,G}$ Vector aleatorio dentro del espacio de búsqueda.
 \end{itemize}
-La predisposición hacia la convergencia o la diversidad viene dada por el valor que demos a $\xi_1$.
 
-El primer término favorece la convergencia: ``sustituye'' la posición del individuo original por uno aleatorio, forzando que los puntos se mantengan donde está la mayoría.  
-El segundo término favorece la exploración: ``mantiene'' la posición original y luego le suma dos perturbaciones: una que lo lleva hacia el \textit{guiding individual} y otra aleatoria.
+Hemos visto que la expresión anterior para la mutación requiere tres componentes que hay que determinar en cada generación. Estos son el guiding individual $\vec{x}_{g,G}$, el parámetro $F_{2}$ y el vector aleatorio $\vec{d}_{r2,G}$.\\
 
-Nótese que no se están redefiniendo las posiciones de la población original, denotada por $\vec{x}$, sino definiendo una nueva población mutada $\vec{v}$.
-\subsection{Crossover}
-Mediante el \textit{crossover} generamos individuos que comparen características entre la población inicial y la población mutada. Lo primero que hacemos es definir la probabilidad CR de que un individuo de la siguiente generación herede características del individuo mutado.
+\underline{Guiding Individual $\vec{x}_{g,G}$}: Se elegirá de manera equiprobable entre los elementos de $Pop_{s}$ o bien $Pop_{g}$, donde la elección de un conjunto u otro se decidirá de si un parámetro llamado Success Ratio de la generación, $SR_{G}$ sobrepasa un cierto umbral constante $\xi_{3}$ entre 0 y 1. El Success Ratio se define como $SR_{0}=1$ y para el resto $SR_{G}=NS_{G}/NP$, es el número de hijos que suceden a los padres en la generación entre el número total de la población. La expresión entonces es la siguiente:
 \begin{equation}
-    \text{CR} = 1 - \frac{R_g}{\text{NP}}
+    \vec{x}_{g,G} \text{ seleccionado aleatoriamente de } = \left\{\begin{array}{ll}
+            Pop_{s} & \text{si }SR_{G-1}<\xi_3,\\
+            Pop_{g} & \text{caso contrario},
+    \end{array}\right.
+\label{guiding}
+\end{equation}
+donde $Pop_{s}$ es el top $floor((1-t^{3})\times 100)\%$ de la población, con $t=G/G_{max}$ y $G_{max}$ número máximo de generaciones; y $Pop_{g}$ es el top $10\%$ de la población. Como $\xi_{3}$ acostumbra a ser pequeño (0.05), si ha habido poco reemplazo se seleccionará el guiding individual de $Pop_{s}$, el cual empieza siendo toda la población y a medida que avanzan las generaciones es cada vez más elitista. Luego si al principio el condicionamiento ha sido muy bueno y la tasa de reemplazos en las primeras generaciones es baja, la selección del guiding individual se hará sobre un conjunto muy grande de la población aumentando las posibilidades de seleccionar un ``peor'' individuo mejorando la exploración. \\
+
+\underline{Parámetro $F_{1}$}: Este parámetro corresponde al peso que se le da al vector de cambio $\vec{x}_{g,G}-\vec{x}_{\text{cur}, G}$, por lo que su valor dependerá de dos escenarios.
+
+\begin{itemize}
+    \item Si el fitness del guiding individual es mejor que el del current individual, entonces $\vec{x}_{g,G}-\vec{x}_{\text{cur}, G}$ es una dirección prometedora. El peso $F_{1}$ será proporcional a cuan mejor es el fitness del guiding individual respecto su generación:
+\begin{equation}
+	F_{1}=\dfrac{1}{2}\left(1+\dfrac{f_{max}-f_{g}}{f_{max}-f_{min}}\right),
+	\label{F1_Pos}
+\end{equation}
+donde $f_{max}$, $f_{min}$, $f_{g}$ son el fitness del máximo, el mínimo y el guiding individual de la generación respectivamente.
+    \item Si el fitness del guiding individual es peor que el del current individual, entonces $\vec{x}_{g,G}-\vec{x}_{\text{cur}, G}$ no es una dirección prometedora. Tomaremos la dirección opuesta como dirección prometedora haciendo que $F_{1}$ sea:
+\begin{equation}
+    F_{1} = \left\{\begin{array}{ll}
+            -0.05 & \text{si }-randn>-0.5,\\
+            -0.95 & \text{si }-randn<-0.95,
+    \end{array}\right.
+\label{F1_neg}
+\end{equation}
+donde $randn$ es una variable aleatoria normal con $\mu=0.5$ y $\sigma=0.2$.
+\end{itemize}
+
+\underline{Vector aleatorio $\vec{d}_{r2,G}$}: La estrategia para crear este vector aleatorio es elegir un individuo aleatorio de la población y sortear para cada una de sus componentes con un cierto umbral $\xi_2$, si se sustituye la componente por un elemento aleatorio dentro del espacio de búsqueda. Esto es:
+
+\begin{equation}
+    \vec{d}^{j}_{r2,G} = \left\{\begin{array}{ll}
+            L^{j} + rand(0,1)\times(U^{j}-L^{j})&\text{si }rand(0,1)<\xi_2,\\
+            \vec{x}_{\text{r2},G}&\text{caso contrario},
+    \end{array}\right.
+\label{ec_rand_vec}
+\end{equation}
+\begin{itemize}
+    \item $\xi_{2}=(1+9\times 10^{5(t-1)})/100$: Umbral de probabilidad para la selección aleatoria.
+    \item rand(0,1): Muestreo aleatorio de una uniforme entre 0 y 1.
+    \item $\vec{x}_{\text{r2},G}$: Individuo aleatorio. ($\vec{x}_{\text{r2},G}\neq\vec{x}_{\text{r1},G}$)
+    \item $L^{j}$: Cota inferior de la componente $j$-ésima en el espacio de búsqueda.
+    \item $U^{j}$: Cota superior de la componente $j$-ésima en el espacio de búsqueda.
+\end{itemize}
+Vemos que por la definición de $\xi_{2}$, y recordando la definición de $t=G/G_{max}$ dada en el guiding individual, está comprendida entre 0 y 1. De hecho este parámetro es monótono decreciente, y en las primeras generaciones es cercano a 1 y en la última igual a 0. Eso hace que capacidad de obtener una componente puramente aleatoria y diferente a un individuo de la población muy alta al principio (explora) y muy baja al final (converge) que sería un comportamiento deseable.
+
+\subsection{Crossover}
+Mediante el crossover generamos nuevos individuos que comparen características entre la población inicial y difieren en alguna mutación. Lo primero que hacemos es definir la probabilidad $CR$ de que un individuo de la siguiente generación herede características del individuo mutado.
+\begin{equation}
+    \text{CR} = 1 - \frac{R_g}{\text{NP}},
     \label{ec_CR}
 \end{equation}
-Con
+con
 \begin{itemize}
     \item NP: Número total de individuos.
-    \item $R_g$: \textit{Ranking} del \textit{Guiding individual}. Si el \textit{guiding individual} es el mejor individuo $R_g=1$, si es el segundo mejor $R_g=2$, etc.
+    \item $R_g$: Ranking del guiding individual. En el conjunto ordenado de individuos por fitness, el puesto que ocupa el guiding individual respecto al mejor.
 \end{itemize}
-Si nos fijamos en la ec.\eqref{ec_mutacion} vemos que los individuos mutados tienen tendencia a acercarse al \textit{guiding individual}. El \textit{crossover} explota esto otorgando una CR alta cuando el \textit{fitness} del \textit{guiding individual} es mejor ($R_g$ pequeño).
+Si nos fijamos en la ec.\eqref{ec_mutacion} vemos que las mutaciones tienen tendencia a acercarse al guiding individual. El crossover explota esto otorgando una $CR$ alta cuando el fitness del guiding individual es ``mejor"" ($R_g$ pequeño).
 
-Una vez calculada la probabilidad de mutación CR generamos un \textit{trial} a partir de cada par individuo original - individuo mutado. Hacemos que el \textit{trial} $u_{i,G}$ herede componentes de la población mutada en función del CR:
+Una vez calculada la probabilidad de mutación $CR$ generamos un individuo mutado o \textit{trial} a partir de cada par individuo original - mutación. Hacemos que el \textit{trial} $u_{i,G}$ herede componentes de la mutación en función del $CR$:
 \begin{equation}
     u_{i,G}^j = \left\{\begin{array}{ll}
-        v_{i,G}^j&\text{si rand}\le\text{CR ó randn}(i)=j\\
-        x_{i,G}^j&\text{otro caso}
+        v_{i,G}^j&\text{si rand}\le\text{CR ó randn}(i)=j,\\
+        x_{i,G}^j&\text{otro caso},
         \end{array}\right.
     \label{ec_crossover}
 \end{equation}
-Donde el superíndice $j$ denota la $j$-ésima componente. 
+donde el superíndice $j$ denota la $j$-ésima componente, y
 \begin{itemize}
     \item randn$(i)$: Entero aleatorio entre 1 y $D$, siendo $D$ el número de componentes de $x, v, u$.
 \end{itemize}
@@ -98,7 +181,17 @@ El método de selección es esencialmente comparar ambos los \textit{fitness} de
 \label{ec_seleccion}
 \end{equation}
 Hacemos una excepción para el individuo con el mejor \textit{fitness}, $x_{\text{best},G}$, que siempre pasa a la siguiente generación.
-\section{Estructura del programa}
+
+\section{Resumen de los Problemas a Resolver.}
+Entre la selección de 10 problemas a resolver hemos tomado:
+
+\subsection{Problema de Ackley}
+
+\section{Desarrollo del Experimento.}
+En este experimento hemos elegido los parámetros fijos $\xi_{1}$. 
+
+SDASDASD
+
 Para escribir el programa hemos modificado bastante el programa inicial dado en clase. El programa se sigue llamando desde \texttt{lanzador.R}, que inicializa el problema mediante las funciones del directorio \texttt{funciones} y el script \texttt{inicia.R} (aunque este ha sido renombrado como \texttt{inicializador.R}).
 
 A partir de aquí los scripts se han directamente sustituido o eliminado. Una vez inicializado el problema, \texttt{lanzador.R} llama a \texttt{evolutivo.R}. Este es el script central del programa, y se encargará de llevar a cabo todos los pasos descritos en el paper\cite{mainPaper}. Para ello hará uso de los siguientes scripts:
@@ -107,6 +200,31 @@ A partir de aquí los scripts se han directamente sustituido o eliminado. Una ve
     \item \texttt{crossover.R}: este script toma la población original y la mutada mediante \texttt{mutacion.R} y las combina generando un individuo \textit{trial}, en base a la variable \textit{CR}, que determina la probabilidad de un individuo de mutar. El \textit{trial} generado es un individuo que puede tener componentes tanto del individuo original como del individuo mutado.
     \item \texttt{seleccion.R}: este script selecciona los individuos eligiendo entre los individuos originales o los \textit{trials}. Para ello tiene en cuenta el \textit{fitness} de los individuos.
     \end{enumerate}
+
+\section{Resultados y Conclusiones.}
+Lorem Lipsum.
+
+\vspace{5cm}
+
 \bibliography{bibliografia}{}
 \bibliographystyle{ieeetr}
+
+\newpage
+
+\section{Anexo. Código del programa.} 
+
+\subsection{lanzador.R}
+\lstinputlisting{../lanzador.R}
+\subsection{inicializador.R}
+\lstinputlisting{../inicializador.R}
+\subsection{evolutivo.R}
+\lstinputlisting{../evolutivo.R}
+\subsection{fitnessPonderado.R}
+\lstinputlisting{../fitnessPonderado.R}
+\subsection{mutacion.R}
+\lstinputlisting{../mutacion.R}
+\subsection{crossover.R}
+\lstinputlisting{../crossover.R}
+\subsection{seleccion.R}
+\lstinputlisting{../seleccion.R}
 \end{document}

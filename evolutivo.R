@@ -1,9 +1,9 @@
 # Orquestra todas las componentes del algoritmo genetico: mutacion, crossover
-# y seleccion de padres, además de la evaluacion de la fun obj y la ordenacion
+# y seleccion de padres, ademas de la evaluacion de la fun obj y la ordenacion
 # de la poblacion en base a fun obj para el ranking.
 #
 # El input es:
-#     - seedE         Semilla para generar mismos parámetros aleatorios por ejecucion.
+#     - seedE         Semilla para generar mismos parametros aleatorios por ejecucion.
 #     - problem       Problema a resolver.
 #     - sizepop       Tamano maximo de la poblacion.
 #     - GMAX          Numero maximo de iteraciones.
@@ -19,21 +19,21 @@ evolutivo <- function(seedE, problem, sizepop, GMAX, fileE) {
   
   ## Inicializa el problema y la semilla.
   set.seed(seedE)                # Inicializa la seed del rand para obtener los mismos
-                                 # resultados en cada ejecución.
+                                 # resultados en cada ejecucion.
   info = inicializador(problem)  # Inicializa los datos del problema.
   indlen = info$n                # Longitud de los individuos. (Numero de variables).
   l = info$l;                    # Cotas inferiores de las variables
   u = info$u;                    # Cotas superiores de las variables
   rm(info)                       # Borrado de la lista info.
   
-  ## Información general de la ejecucion, se muestra en la consola.
+  ## Informacion general de la ejecucion, se muestra en la consola.
   cat(sprintf("Procesando problema: %s en dimension %d\n", problem, indlen))
   cat(sprintf("Semilla: %d\n", seedE))
   cat(sprintf("Numero maximo iteraciones: %d\n", GMAX))
   
-  ti = proc.time()  #Guardamos comienzo de ejecución
+  ti = proc.time()  #Guardamos comienzo de ejecucion
  
-  ## Inicializamos la población y parámetros iniciales para la primera iteracion.
+  ## Inicializamos la poblacion y parametros iniciales para la primera iteracion.
   NSG = sizepop                           # Inicializamos el num de indiv que pasan a
                                           # la siguiente iteracion a toda la poblacion.
   
@@ -78,7 +78,7 @@ evolutivo <- function(seedE, problem, sizepop, GMAX, fileE) {
    if(CR < 0.05) CR = 0.05
    if(CR > 0.95) CR = 0.95
    
-   # Generamos los trials (padres mutados) a partir de la población de padres y la matriz de mutacion.
+   # Generamos los trials (padres mutados) a partir de la poblacion de padres y la matriz de mutacion.
    trialIndividuals = crossover(population, mutationMat, CR)
 
    # Calculamos el fitness y fitness ponderado de los trials (nuevos padres mutados).
@@ -96,7 +96,7 @@ evolutivo <- function(seedE, problem, sizepop, GMAX, fileE) {
 
  finEjecucion = proc.time()-ti
  fileConn <- file(fileE,open="at")                        #apertura del fichero de resultados
- writeLines(sprintf("%s\t%9d\t%3d\t%4d\t%f\t%f ",         #escribiendo información básica
+ writeLines(sprintf("%s\t%9d\t%3d\t%4d\t%f\t%f ",         #escribiendo informacion basica
                     problem,seedE,sizepop, GMAX,max(fitness),finEjecucion[3]), fileConn)
  close(fileConn)                                          #cierre de fichero de resultados
  
