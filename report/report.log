@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7250 64-bit) (preloaded format=latex 2020.4.17)  19 APR 2020 02:10
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7250 64-bit) (preloaded format=pdflatex 2020.1.10)  21 APR 2020 00:23
 entering extended mode
 **./report.tex
 (report.tex
@@ -95,10 +95,10 @@ Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
 ("C:\Program Files\MiKTeX 2.9\tex/latex/graphics-cfg\graphics.cfg"
 File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
 )
-Package graphics Info: Driver file: dvips.def on input line 105.
+Package graphics Info: Driver file: pdftex.def on input line 105.
 
-("C:\Program Files\MiKTeX 2.9\tex/latex/graphics-def\dvips.def"
-File: dvips.def 2017/06/20 v3.1d Graphics/color driver for dvips
+("C:\Program Files\MiKTeX 2.9\tex/latex/graphics-def\pdftex.def"
+File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
 ))
 \Gin@req@height=\dimen112
 \Gin@req@width=\dimen113
@@ -129,7 +129,7 @@ Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
 ("C:\Program Files\MiKTeX 2.9\tex/latex/graphics-cfg\color.cfg"
 File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
-Package xcolor Info: Driver file: dvips.def on input line 225.
+Package xcolor Info: Driver file: pdftex.def on input line 225.
 
 ("C:\Program Files\MiKTeX 2.9\tex/latex/colortbl\colortbl.sty"
 Package: colortbl 2020/01/04 v1.0e Color table columns (DPC)
@@ -149,6 +149,7 @@ Package: array 2019/08/31 v2.4l Tabular extension package (FMi)
 )
 \rownum=\count98
 Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1348.
+Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1352.
 Package xcolor Info: Model `RGB' extended on input line 1364.
 Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1366.
 Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1367.
@@ -238,7 +239,7 @@ Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
 )
 Package pdftexcmds Info: \pdf@primitive is available.
 Package pdftexcmds Info: \pdf@ifprimitive is available.
-Package pdftexcmds Info: \pdfdraftmode is ignored in DVI mode.
+Package pdftexcmds Info: \pdfdraftmode found.
 )
 ("C:\Program Files\MiKTeX 2.9\tex/generic/kvsetkeys\kvsetkeys.sty"
 Package: kvsetkeys 2019/12/15 v1.18 Key value parser (HO)
@@ -330,28 +331,21 @@ Package: atbegshi 2019/12/05 v1.19 At begin shipout hook (HO)
 \c@Item=\count118
 \c@Hfootnote=\count119
 )
-Package hyperref Info: Driver (default): hdvips.
+Package hyperref Info: Driver (autodetected): hpdftex.
 
-("C:\Program Files\MiKTeX 2.9\tex/latex/hyperref\hdvips.def"
-File: hdvips.def 2019/11/10 v7.00c Hyperref driver for dvips
-
-("C:\Program Files\MiKTeX 2.9\tex/latex/hyperref\pdfmark.def"
-File: pdfmark.def 2019/11/10 v7.00c Hyperref definitions for pdfmark specials
-\pdf@docset=\toks28
-\pdf@box=\box33
-\pdf@toks=\toks29
-\pdf@defaulttoks=\toks30
-\HyField@AnnotCount=\count120
-\Fld@listcount=\count121
-\c@bookmark@seq@number=\count122
-
-("C:\Program Files\MiKTeX 2.9\tex/latex/rerunfilecheck\rerunfilecheck.sty"
-Package: rerunfilecheck 2019/12/05 v1.9 Rerun checks for auxiliary files (HO)
+("C:\Program Files\MiKTeX 2.9\tex/latex/hyperref\hpdftex.def"
+File: hpdftex.def 2019/11/10 v7.00c Hyperref driver for pdfTeX
 
 ("C:\Program Files\MiKTeX 2.9\tex/latex/atveryend\atveryend.sty"
 Package: atveryend 2019-12-11 v1.11 Hooks at the very end of document (HO)
 Package atveryend Info: \enddocument detected (standard20110627).
 )
+\Fld@listcount=\count120
+\c@bookmark@seq@number=\count121
+
+("C:\Program Files\MiKTeX 2.9\tex/latex/rerunfilecheck\rerunfilecheck.sty"
+Package: rerunfilecheck 2019/12/05 v1.9 Rerun checks for auxiliary files (HO)
+
 ("C:\Program Files\MiKTeX 2.9\tex/generic/uniquecounter\uniquecounter.sty"
 Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
 )
@@ -359,26 +353,29 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 86.
 )
 \Hy@SectionHShift=\skip49
-))
+)
+("C:\Program Files\MiKTeX 2.9\tex/latex/tools\dcolumn.sty"
+Package: dcolumn 2014/10/28 v1.06 decimal alignment package (DPC)
+)
 ("C:\Program Files\MiKTeX 2.9\tex/latex/listings\listings.sty"
-\lst@mode=\count123
-\lst@gtempboxa=\box34
-\lst@token=\toks31
-\lst@length=\count124
+\lst@mode=\count122
+\lst@gtempboxa=\box33
+\lst@token=\toks28
+\lst@length=\count123
 \lst@currlwidth=\dimen142
-\lst@column=\count125
-\lst@pos=\count126
+\lst@column=\count124
+\lst@pos=\count125
 \lst@lostspace=\dimen143
 \lst@width=\dimen144
-\lst@newlines=\count127
-\lst@lineno=\count128
+\lst@newlines=\count126
+\lst@lineno=\count127
 \lst@maxwidth=\dimen145
 
 ("C:\Program Files\MiKTeX 2.9\tex/latex/listings\lstmisc.sty"
 File: lstmisc.sty 2019/09/10 1.8c (Carsten Heinz)
-\c@lstnumber=\count129
-\lst@skipnumbers=\count130
-\lst@framebox=\box35
+\c@lstnumber=\count128
+\lst@skipnumbers=\count129
+\lst@framebox=\box34
 )
 ("C:\Program Files\MiKTeX 2.9\tex/latex/listings\listings.cfg"
 File: listings.cfg 2019/09/10 1.8c listings configuration
@@ -399,27 +396,27 @@ LaTeX Info: Redefining \% on input line 25.
 )
 \openout1 = `report.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
-LaTeX Info: Redefining \. on input line 48.
-LaTeX Info: Redefining \% on input line 48.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
+LaTeX Info: Redefining \. on input line 53.
+LaTeX Info: Redefining \% on input line 53.
 
 *geometry* driver: auto-detecting
-*geometry* detected driver: dvips
+*geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
-* driver: dvips
+* driver: pdftex
 * paper: a4paper
 * layout: <same size as paper>
 * layoutoffset:(h,v)=(0.0pt,0.0pt)
@@ -450,8 +447,27 @@ LaTeX Info: Redefining \% on input line 48.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
+("C:\Program Files\MiKTeX 2.9\tex/context/base/mkii\supp-pdf.mkii"
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count130
+\scratchdimen=\dimen146
+\scratchbox=\box35
+\nofMPsegments=\count131
+\nofMParguments=\count132
+\everyMPshowfont=\toks29
+\MPscratchCnt=\count133
+\MPscratchDim=\dimen147
+\MPnumerator=\count134
+\makeMPintoPDFobject=\count135
+\everyMPtoPDFconversion=\toks30
+) ("C:\Program Files\MiKTeX 2.9\tex/latex/epstopdf-pkg\epstopdf-base.sty"
+Package: epstopdf-base 2019-12-09 v2.10 Base part for package epstopdf
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+85.
+)
 \AtBeginShipoutBox=\box36
-Package hyperref Info: Link coloring OFF on input line 48.
+Package hyperref Info: Link coloring OFF on input line 53.
+
 ("C:\Program Files\MiKTeX 2.9\tex/latex/hyperref\nameref.sty"
 Package: nameref 2019/09/16 v2.46 Cross-referencing by name of section
 
@@ -461,30 +477,91 @@ Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 ("C:\Program Files\MiKTeX 2.9\tex/generic/gettitlestring\gettitlestring.sty"
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
-\c@section@level=\count131
+\c@section@level=\count136
 )
-LaTeX Info: Redefining \ref on input line 48.
-LaTeX Info: Redefining \pageref on input line 48.
-LaTeX Info: Redefining \nameref on input line 48.
+LaTeX Info: Redefining \ref on input line 53.
+LaTeX Info: Redefining \pageref on input line 53.
+LaTeX Info: Redefining \nameref on input line 53.
 
 (report.out) (report.out)
 \@outlinefile=\write3
 \openout3 = `report.out'.
 
-\c@lstlisting=\count132
+\c@lstlisting=\count137
 
-Underfull \hbox (badness 10000) in paragraph at lines 80--81
+Underfull \hbox (badness 10000) in paragraph at lines 85--86
 
  []
 
 [1
 
-]
-Underfull \hbox (badness 10000) in paragraph at lines 89--91
+{C:/Users/algar/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
+Underfull \hbox (badness 10000) in paragraph at lines 94--96
 
  []
 
-[2] [3] (report.bbl) [4] (../lanzador.R
+[2] [3]
+<../imagenes/ackley.png, id=116, 415.5525pt x 359.84438pt>
+File: ../imagenes/ackley.png Graphic file (type png)
+<use ../imagenes/ackley.png>
+Package pdftex.def Info: ../imagenes/ackley.png  used on input line 215.
+(pdftex.def)             Requested size: 122.91785pt x 106.43869pt.
+<../imagenes/boachevsky3.png, id=118, 392.96812pt x 371.88937pt>
+File: ../imagenes/boachevsky3.png Graphic file (type png)
+<use ../imagenes/boachevsky3.png>
+Package pdftex.def Info: ../imagenes/boachevsky3.png  used on input line 216.
+(pdftex.def)             Requested size: 122.91785pt x 116.32295pt.
+<../imagenes/easom.png, id=119, 347.04657pt x 320.69812pt>
+File: ../imagenes/easom.png Graphic file (type png)
+<use ../imagenes/easom.png>
+Package pdftex.def Info: ../imagenes/easom.png  used on input line 217.
+(pdftex.def)             Requested size: 122.91785pt x 113.58682pt.
+<../imagenes/matyas.png, id=120, 344.03531pt x 302.63063pt>
+File: ../imagenes/matyas.png Graphic file (type png)
+<use ../imagenes/matyas.png>
+Package pdftex.def Info: ../imagenes/matyas.png  used on input line 222.
+(pdftex.def)             Requested size: 122.91785pt x 108.12497pt.
+<../imagenes/rosenbrock.png, id=121, 349.305pt x 331.2375pt>
+File: ../imagenes/rosenbrock.png Graphic file (type png)
+<use ../imagenes/rosenbrock.png>
+Package pdftex.def Info: ../imagenes/rosenbrock.png  used on input line 223.
+(pdftex.def)             Requested size: 122.91785pt x 116.56158pt.
+<../imagenes/zakharov.png, id=122, 347.04657pt x 341.77687pt>
+File: ../imagenes/zakharov.png Graphic file (type png)
+<use ../imagenes/zakharov.png>
+Package pdftex.def Info: ../imagenes/zakharov.png  used on input line 224.
+(pdftex.def)             Requested size: 122.91785pt x 121.05263pt.
+<../imagenes/mixhalewicz.png, id=123, 349.305pt x 336.50719pt>
+File: ../imagenes/mixhalewicz.png Graphic file (type png)
+<use ../imagenes/mixhalewicz.png>
+Package pdftex.def Info: ../imagenes/mixhalewicz.png  used on input line 229.
+(pdftex.def)             Requested size: 122.91785pt x 118.41597pt.
+<../imagenes/crosstray.png, id=124, 436.63126pt x 248.42813pt>
+File: ../imagenes/crosstray.png Graphic file (type png)
+<use ../imagenes/crosstray.png>
+Package pdftex.def Info: ../imagenes/crosstray.png  used on input line 230.
+(pdftex.def)             Requested size: 204.85846pt x 116.55653pt.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<../imagenes/dropwave.png, id=125, 431.36156pt x 236.38312pt>
+File: ../imagenes/dropwave.png Graphic file (type png)
+<use ../imagenes/dropwave.png>
+Package pdftex.def Info: ../imagenes/dropwave.png  used on input line 235.
+(pdftex.def)             Requested size: 204.85846pt x 112.25789pt.
+<../imagenes/griewank.png, id=126, 439.6425pt x 225.09094pt>
+File: ../imagenes/griewank.png Graphic file (type png)
+<use ../imagenes/griewank.png>
+Package pdftex.def Info: ../imagenes/griewank.png  used on input line 236.
+(pdftex.def)             Requested size: 204.85846pt x 104.88257pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[4 <../imagenes/ackley.png> <../imagenes/boachevsky3.png> <../imagenes/easom.pn
+g> <../imagenes/matyas.png> <../imagenes/rosenbrock.png> <../imagenes/zakharov.
+png>] [5 <../imagenes/mixhalewicz.png> <../imagenes/crosstray.png> <../imagenes
+/dropwave.png> <../imagenes/griewank.png>] (report.bbl) [6] (../lanzador.R
 LaTeX Font Info:    Trying to load font information for OML+cmr on input line 1
 4.
 
@@ -501,30 +578,50 @@ File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <8> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 52.
-) [5]
-(../inicializador.R [6]) (../evolutivo.R [7] [8]) (../fitnessPonderado.R
-[9]) (../mutacion.R [10]) (../crossover.R [11]) (../seleccion.R [12])
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 230.
- [13]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 230.
+) [7]
+(../inicializador.R [8]) (../evolutivo.R [9] [10]) (../fitnessPonderado.R
+[11]) (../mutacion.R [12]) (../crossover.R [13]) (../seleccion.R [14])
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 300.
+ [15]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 300.
 
 (report.aux
 LaTeX Info: Redefining \. on input line 25.
 LaTeX Info: Redefining \% on input line 25.
 )
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 230.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 230.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 300.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 300.
 Package rerunfilecheck Info: File `report.out' has not changed.
-(rerunfilecheck)             Checksum: 230A5D3BEB43C8D91DDC70F410DA274F;1005.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 230.
+(rerunfilecheck)             Checksum: 8338A7DD32C497ABCDAC6FFC91CBC4AC;1241.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 300.
  ) 
 Here is how much of TeX's memory you used:
- 10020 strings out of 492450
- 140675 string characters out of 3129763
- 892518 words of memory out of 3000000
- 14191 multiletter control sequences out of 15000+200000
- 9537 words of font info for 35 fonts, out of 3000000 for 9000
+ 11048 strings out of 492449
+ 156194 string characters out of 3129737
+ 899680 words of memory out of 3000000
+ 14653 multiletter control sequences out of 15000+200000
+ 10156 words of font info for 37 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 40i,11n,40p,757b,1999s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 40i,11n,40p,757b,2004s stack positions out of 5000i,500n,10000p,200000b,50000s
+<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Pr
+ogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Program Fi
+les/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Program Files/MiKT
+eX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files/MiKTeX 2.9/f
+onts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Program Files/MiKTeX 2.9/fonts/type
+1/public/amsfonts/cm/cmmi8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/
+amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/
+cm/cmr12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.
+pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr5.pfb><C:/Pr
+ogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Program File
+s/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files/MiKTeX 2
+.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts
+/type1/public/amsfonts/cm/cmsy7.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/pu
+blic/amsfonts/cm/cmsy8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsf
+onts/cm/cmti10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/
+cmtt10.pfb>
+Output written on report.pdf (15 pages, 1409504 bytes).
+PDF statistics:
+ 855 PDF objects out of 1000 (max. 8388607)
+ 540 named destinations out of 1000 (max. 500000)
+ 203 words of extra memory for PDF output out of 10000 (max. 10000000)
 
-Output written on report.dvi (13 pages, 551960 bytes).

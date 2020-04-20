@@ -9,6 +9,11 @@
 \usepackage{float}
 \usepackage{hyperref}
 
+\usepackage{dcolumn}
+\newcolumntype{L}{D{.}{.}{1.1}}
+
+\spanishdecimal{.} 
+
 \usepackage{listings}
 \usepackage{color}
 \definecolor{dkgreen}{rgb}{0,0.6,0}
@@ -49,7 +54,7 @@
 \maketitle
 En este trabajo hemos implementado la opción T3\_DE, correspondiente al algoritmo de evolución diferencial desarrollado en el artículo de Tian, Gao y Dai \cite{mainPaper}. Este informe contiene en sus secciones, la descripción del algoritmo, un resumen de los problemas a resolver, la estructura y los parámetros del experimento, los resultados y conclusiones, las referencias y un anexo con el código del programa.
 
-\section{Descripción del Algoritmo.}
+\section{Descripción del Algoritmo}
 Este algoritmo es de tipo evolutivo, luego su esquema general será el siguiente. Crearemos un conjunto de \textbf{mutaciones}, haremos un \textbf{crossover} entre la población de padres y las mutaciones para crear una nueva población de hijos, y realizaremos una \textbf{selección} para seleccionar los mejores mejores individuos entre la población de padres e hijos.
 
 En concreto este algoritmo es de evolución diferencial, lo que quiere decir que la estrategia para las mutaciones está basada en diferencias entre individuos. Esto implica que la elección individuos más o menos ``buenos'' para calcular estas diferencias contribuye a que el algoritmo tenga un comportamiento más convergente o más exploratorio. En concreto, este algoritmo tiene un modelo híbrido con algunos parámetros autoadaptativos, de forma que especialmente en las en primeras generaciones y cuando el porcentaje de hijos que suceden a los padres es bajo, los parámetros se adaptan para ofrecer un mayor comportamiento exploratorio.
@@ -182,27 +187,92 @@ El método de selección es esencialmente comparar ambos los \textit{fitness} de
 \end{equation}
 Hacemos una excepción para el individuo con el mejor \textit{fitness}, $x_{\text{best},G}$, que siempre pasa a la siguiente generación.
 
-\section{Resumen de los Problemas a Resolver.}
-Entre la selección de 10 problemas a resolver hemos tomado:
+\section{Resumen de los Problemas a Resolver}
+Entre la selección de 10 problemas a resolver hemos tomado las funciones: Ackley, CrossInTray, Drop-Wave, Griewank, Bohachevsky3, Matyas, Zakharov, Rosenbrock, Michalewicz (2D) y Easom. La idea en esta selección es que haya una muestra representativa de diferentes comportamientos según el catálogo \textit{http://www.sfu.ca/~ssurjano/optimization.html}.
 
-\subsection{Problema de Ackley}
+En las siguientes secciones mostramos una tabla resumen de las funciones con información de su tipología y mínimos globales, así como la representación de las funciones y su topología comprender su comportamiento.
 
-\section{Desarrollo del Experimento.}
-En este experimento hemos elegido los parámetros fijos $\xi_{1}$. 
+\subsection{Tabla resumen de las Funciones}
+\[\arraycolsep=7pt\def\arraystretch{1.4}
+\begin{array}{|c|c|c|}
+\hline
+\text{\textbf{Nombre}} & \text{\textbf{Tipología}} & \text{\textbf{Mínimo Global}} \\ \hline
+\text{Ackley} & \text{Múltiples mínimos locales} & f(0,...,0)=0 \\ \hline
+\text{CrossInTray} & \text{Múltiples mínimos locales} & f(\pm 1.3491, \pm 1.3491)=-2.06261 \\ \hline
+\text{Drop-Wave} & \text{Múltiples mínimos locales} & f(0,0)=-1 \\ \hline
+\text{Griewank} & \text{Múltiples mínimos locales} & f(0,...,0)=0 \\ \hline
+\text{Bohachevsky3} & \text{Forma de Bol} & f(0,0)=0 \\ \hline
+\text{Matyas} & \text{Forma de Lámina} & f(0,0)=0 \\ \hline
+\text{Zakharov} & \text{Forma de Lámina} & f(0,...,0)=0 \\ \hline
+\text{Rosenbrock} & \text{Forma de Valle} & f(1,...,1)=0 \\ \hline
+\text{Michalewicz (2D)} & \text{Caidas Abruptas} & f(2.20,1.57)=-1.8013 \\ \hline
+\text{Easom} & \text{Caidas Abruptas} & f(\pi,-\pi)=-1 \\ \hline
+\end{array}\]
 
-SDASDASD
+\subsection{Topología de las Funciones}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.27\textwidth]{../imagenes/ackley}
+\includegraphics[width=0.27\textwidth]{../imagenes/boachevsky3}
+\includegraphics[width=0.27\textwidth]{../imagenes/easom}
+\caption{De izquierda a derecha las funciones de Ackley, Boachevsky3 y Easom}
+\end{figure}
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.27\textwidth]{../imagenes/matyas}
+\includegraphics[width=0.27\textwidth]{../imagenes/rosenbrock}
+\includegraphics[width=0.27\textwidth]{../imagenes/zakharov}
+\caption{De izquierda a derecha las funciones de Matyas, Rosenbrock y Zakharov}
+\end{figure}
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.27\textwidth]{../imagenes/mixhalewicz}
+\includegraphics[width=0.45\textwidth]{../imagenes/crosstray}
+\caption{De izquierda a derecha las funciones de Mixhalewicz y Crosstray}
+\end{figure}
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.45\textwidth]{../imagenes/dropwave}
+\includegraphics[width=0.45\textwidth]{../imagenes/griewank}
+\caption{De izquierda a derecha las funciones de Drop-Wave y Griewank}
+\end{figure}
 
-Para escribir el programa hemos modificado bastante el programa inicial dado en clase. El programa se sigue llamando desde \texttt{lanzador.R}, que inicializa el problema mediante las funciones del directorio \texttt{funciones} y el script \texttt{inicia.R} (aunque este ha sido renombrado como \texttt{inicializador.R}).
+\newpage
 
-A partir de aquí los scripts se han directamente sustituido o eliminado. Una vez inicializado el problema, \texttt{lanzador.R} llama a \texttt{evolutivo.R}. Este es el script central del programa, y se encargará de llevar a cabo todos los pasos descritos en el paper\cite{mainPaper}. Para ello hará uso de los siguientes scripts:
+\section{Desarrollo del Experimento}
+
+\subsection{Estructura del Programa}
+El programa comienza con el \texttt{lanzador.R} que actúa como orquestrador. Desde aquí se llama al \texttt{inicializador.R}, que inicializa los datos de las funciones a resolver del directorio \texttt{funciones}; y se realiza un bucle que va llamando a la función en \texttt{evolutivo.R}, que contiene el algoritmo evolutivo; resolviendo todas las instancias de los problemas a resolver.
+
+Dentro de \texttt{evolutivo.R} hay una función que va llamando a todas las subrrutinas que componen el algoritmo tal y como está descrito en el artículo \cite{mainPaper} y la primera sección de este informe. Los scripts que contienen estas subrrutinas son:
+
 \begin{enumerate}
-    \item \texttt{mutacion.R}: este script recibe como argumento una población de individuos y genera una población mutada, sin modificar la población original.
-    \item \texttt{crossover.R}: este script toma la población original y la mutada mediante \texttt{mutacion.R} y las combina generando un individuo \textit{trial}, en base a la variable \textit{CR}, que determina la probabilidad de un individuo de mutar. El \textit{trial} generado es un individuo que puede tener componentes tanto del individuo original como del individuo mutado.
-    \item \texttt{seleccion.R}: este script selecciona los individuos eligiendo entre los individuos originales o los \textit{trials}. Para ello tiene en cuenta el \textit{fitness} de los individuos.
+    \item \texttt{mutacion.R}: este script recibe como argumento una población de individuos y genera una lista de mutaciones, sin modificar la población original.
+    \item \texttt{crossover.R}: este script toma la población original y la lista de mutaciones de \texttt{mutacion.R} y las combina generando un nuevo individuo \textit{trial}, en base a la variable \textit{CR}, que determina la probabilidad de un individuo de mutar.
+    \item \texttt{seleccion.R}: este script selecciona los individuos eligiendo entre los individuos originales y los \textit{trials}. Para ello tiene en cuenta el \textit{fitness} de los individuos y el \textit{fitness ponderado} (\ref{ec_fitness_ponderado}) que se calcula desde \texttt{fitnessPonderado.R}. Devuelve una lista ordenada por \textit{fitness} de la nueva población.
+    \item \texttt{fitnessPonderado.R}: Evalua la expresión (\ref{ec_fitness_ponderado}) sobre la población y devuelve sus \textit{fitness ponderado}.
     \end{enumerate}
 
-\section{Resultados y Conclusiones.}
+\subsection{Parámetros del Algoritmo}
+En este experimento existen tres parámetros que el usuario debe prefijar desde el principio y no se modifican por el algoritmo, que son $\xi_{1}=$, $\xi_{3}$ y $F_{2}$. Aquí hemos utilizado los mismos que en el artículo \cite{mainPaper}, es decir, $\xi_{1}=0.05$, $\xi_{3}=0.05$ y $F_{2}=0.5$.
+
+En el artículo se sugiere que el valor de $\xi_{1}$ se puede incrementar hasta 0.2 para problemas complicados. No obstante aquí hemos mantenido los parámetros del artículo, ya experimentando con pequeños ajustes no hemos obtenido cambios significativos en el comportamiento del algoritmo para los problemas seleccionados.
+
+Además hemos para cada problema el algoritmo se ha repetido 25 veces y se ha tomado una población inicial aleatoria de 1000 individuos. 
+
+\section{Resultados y Conclusiones}
 Lorem Lipsum.
+
+\[\arraycolsep=7pt\def\arraystretch{1.4}
+\begin{array}{|c|c|c|c|c|}
+\hline
+\text{\textbf{Problema}} & \text{\textbf{Mejor F.Obj.}} & \text{\textbf{Error}} & \text{\textbf{Mediana F.Obj.}} & \text{\textbf{Tiempo 25 ejec.}} \\ \hline
+\text{Ackley} & 0 & 0 & 0.020933 & 71.342s \\ \hline
+\text{CrossInTray} & -2.062612 & 0 & -2.062612 & 60.682 \\ \hline
+\end{array}\]
+
+Acabar Tabla \\
+Justificar que la mediana es mejor que la media: si sale un resultado que explota por una mala inicialización jode la media muchisimo.
 
 \vspace{5cm}
 
@@ -211,7 +281,7 @@ Lorem Lipsum.
 
 \newpage
 
-\section{Anexo. Código del programa.} 
+\section{Anexo. Código del programa} 
 
 \subsection{lanzador.R}
 \lstinputlisting{../lanzador.R}
