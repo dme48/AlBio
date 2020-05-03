@@ -82,27 +82,27 @@ donde las variables son:
     \item $\vec{d}_{r2,G}$ Vector aleatorio dentro del espacio de búsqueda.
 \end{itemize}
 
-Hemos visto que la expresión anterior para la mutación requiere tres componentes que hay que determinar en cada generación. Estos son el guiding individual $\vec{x}_{g,G}$, el parámetro $F_{2}$ y el vector aleatorio $\vec{d}_{r2,G}$.\\
+Hemos visto que la expresión anterior para la mutación requiere tres componentes que hay que determinar en cada generación. Estos son el guiding individual $\vec{x}_{g,G}$, el parámetro $F_{2}$ y el vector aleatorio $\vec{d}_{r2,G}$.\vspace{1cm}
 
-\underline{Guiding Individual $\vec{x}_{g,G}$}: Se elegirá de manera equiprobable entre los elementos de $Pop_{s}$ o bien $Pop_{g}$, donde la elección de un conjunto u otro se decidirá de si un parámetro llamado Success Ratio de la generación, $SR_{G}$ sobrepasa un cierto umbral constante $\xi_{3}$ entre 0 y 1. El Success Ratio se define como $SR_{0}=1$ y para el resto $SR_{G}=NS_{G}/NP$, es el número de hijos que suceden a los padres en la generación entre el número total de la población. La expresión entonces es la siguiente:
+\underline{Guiding Individual $\vec{x}_{g,G}$}: Se elegirá de manera equiprobable entre los elementos de $\text{Pop}_{s}$ o bien $\text{Pop}_{g}$, donde la elección de un conjunto u otro se decidirá de si un parámetro llamado Success Ratio de la generación, $SR_{G}$ sobrepasa un cierto umbral constante $\xi_{3}$ entre 0 y 1. El Success Ratio se define como $SR_{0}=1$ y para el resto $SR_{G}=NS_{G}/NP$, es el número de hijos que suceden a los padres en la generación entre el número total de la población. La expresión entonces es la siguiente:
 \begin{equation}
     \vec{x}_{g,G} \text{ seleccionado aleatoriamente de } = \left\{\begin{array}{ll}
-            Pop_{s} & \text{si }SR_{G-1}<\xi_3,\\
-            Pop_{g} & \text{caso contrario},
+            \text{Pop}_{s} & \text{si }SR_{G-1}<\xi_3,\\
+            \text{Pop}_{g} & \text{caso contrario},
     \end{array}\right.
 \label{guiding}
 \end{equation}
-donde $Pop_{s}$ es el top $floor((1-t^{3})\times 100)\%$ de la población, con $t=G/G_{max}$ y $G_{max}$ número máximo de generaciones; y $Pop_{g}$ es el top $10\%$ de la población. Como $\xi_{3}$ acostumbra a ser pequeño (0.05), si ha habido poco reemplazo se seleccionará el guiding individual de $Pop_{s}$, el cual empieza siendo toda la población y a medida que avanzan las generaciones es cada vez más elitista. Luego si al principio el condicionamiento ha sido muy bueno y la tasa de reemplazos en las primeras generaciones es baja, la selección del guiding individual se hará sobre un conjunto muy grande de la población aumentando las posibilidades de seleccionar un ``peor'' individuo mejorando la exploración. \\
+donde $\text{Pop}_{s}$ es el top $floor((1-t^{3})\times 100)\%$ de la población, con $t=G/G_{\max}$ y $G_{\max}$ número máximo de generaciones; y $\text{Pop}_{g}$ es el top $10\%$ de la población. Como $\xi_{3}$ acostumbra a ser pequeño (0.05), si ha habido poco reemplazo se seleccionará el guiding individual de $\text{Pop}_{s}$, el cual empieza siendo toda la población y a medida que avanzan las generaciones es cada vez más elitista. Luego si al principio el condicionamiento ha sido muy bueno y la tasa de reemplazos en las primeras generaciones es baja, la selección del guiding individual se hará sobre un conjunto muy grande de la población aumentando las posibilidades de seleccionar un ``peor'' individuo mejorando la exploración.\vspace{1cm}
 
 \underline{Parámetro $F_{1}$}: Este parámetro corresponde al peso que se le da al vector de cambio $\vec{x}_{g,G}-\vec{x}_{\text{cur}, G}$, por lo que su valor dependerá de dos escenarios.
 
 \begin{itemize}
     \item Si el fitness del guiding individual es mejor que el del current individual, entonces $\vec{x}_{g,G}-\vec{x}_{\text{cur}, G}$ es una dirección prometedora. El peso $F_{1}$ será proporcional a cuan mejor es el fitness del guiding individual respecto su generación:
 \begin{equation}
-	F_{1}=\dfrac{1}{2}\left(1+\dfrac{f_{max}-f_{g}}{f_{max}-f_{min}}\right),
+	F_{1}=\dfrac{1}{2}\left(1+\dfrac{f_{\max}-f_{g}}{f_{\max}-f_{min}}\right),
 	\label{F1_Pos}
 \end{equation}
-donde $f_{max}$, $f_{min}$, $f_{g}$ son el fitness del máximo, el mínimo y el guiding individual de la generación respectivamente.
+donde $f_{\max}$, $f_{min}$, $f_{g}$ son el fitness del máximo, el mínimo y el guiding individual de la generación respectivamente.
     \item Si el fitness del guiding individual es peor que el del current individual, entonces $\vec{x}_{g,G}-\vec{x}_{\text{cur}, G}$ no es una dirección prometedora. Tomaremos la dirección opuesta como dirección prometedora haciendo que $F_{1}$ sea:
 \begin{equation}
     F_{1} = \left\{\begin{array}{ll}
@@ -130,7 +130,7 @@ donde $randn$ es una variable aleatoria normal con $\mu=0.5$ y $\sigma=0.2$.
     \item $L^{j}$: Cota inferior de la componente $j$-ésima en el espacio de búsqueda.
     \item $U^{j}$: Cota superior de la componente $j$-ésima en el espacio de búsqueda.
 \end{itemize}
-Vemos que por la definición de $\xi_{2}$, y recordando la definición de $t=G/G_{max}$ dada en el guiding individual, está comprendida entre 0 y 1. De hecho este parámetro es monótono decreciente, y en las primeras generaciones es cercano a 1 y en la última igual a 0. Eso hace que capacidad de obtener una componente puramente aleatoria y diferente a un individuo de la población muy alta al principio (explora) y muy baja al final (converge) que sería un comportamiento deseable.
+Vemos que por la definición de $\xi_{2}$, y recordando la definición de $t=G/G_{\max}$ dada en el guiding individual, está comprendida entre 0 y 1. De hecho este parámetro es monótono decreciente, y en las primeras generaciones es cercano a 1 y en la última igual a 0. Eso hace que capacidad de obtener una componente puramente aleatoria y diferente a un individuo de la población muy alta al principio (explora) y muy baja al final (converge) que sería un comportamiento deseable.
 
 \subsection{Crossover}
 Mediante el crossover generamos nuevos individuos que comparen características entre la población inicial y difieren en alguna mutación. Lo primero que hacemos es definir la probabilidad $CR$ de que un individuo de la siguiente generación herede características del individuo mutado.
@@ -188,7 +188,7 @@ El método de selección es esencialmente comparar ambos los \textit{fitness} de
 Hacemos una excepción para el individuo con el mejor \textit{fitness}, $x_{\text{best},G}$, que siempre pasa a la siguiente generación.
 
 \section{Resumen de los Problemas a Resolver}
-Entre la selección de 10 problemas a resolver hemos tomado las funciones: Ackley, CrossInTray, Drop-Wave, Griewank, Bohachevsky3, Matyas, Zakharov, Rosenbrock, Michalewicz (2D) y Easom. La idea en esta selección es que haya una muestra representativa de diferentes comportamientos según el catálogo \textit{http://www.sfu.ca/~ssurjano/optimization.html}.
+Entre la selección de 10 problemas a resolver hemos tomado las funciones: Ackley, CrossInTray, Drop-Wave, Griewank, Bohachevsky3, Matyas, Zakharov, Rosenbrock, Michalewicz (2D) y Easom. La idea en esta selección es que haya una muestra representativa de diferentes comportamientos según el catálogo \url{http://www.sfu.ca/~ssurjano/optimization.html}.
 
 En las siguientes secciones mostramos una tabla resumen de las funciones con información de su tipología y mínimos globales, así como la representación de las funciones y su topología comprender su comportamiento.
 
@@ -217,20 +217,20 @@ En las siguientes secciones mostramos una tabla resumen de las funciones con inf
 \includegraphics[width=0.27\textwidth]{../imagenes/easom}
 \caption{De izquierda a derecha las funciones de Ackley, Boachevsky3 y Easom}
 \end{figure}
-\begin{figure}[h!]
+\begin{figure}[ht]
 \centering
 \includegraphics[width=0.27\textwidth]{../imagenes/matyas}
 \includegraphics[width=0.27\textwidth]{../imagenes/rosenbrock}
 \includegraphics[width=0.27\textwidth]{../imagenes/zakharov}
 \caption{De izquierda a derecha las funciones de Matyas, Rosenbrock y Zakharov}
 \end{figure}
-\begin{figure}[h!]
+\begin{figure}[ht]
 \centering
 \includegraphics[width=0.27\textwidth]{../imagenes/mixhalewicz}
 \includegraphics[width=0.45\textwidth]{../imagenes/crosstray}
 \caption{De izquierda a derecha las funciones de Mixhalewicz y Crosstray}
 \end{figure}
-\begin{figure}[h!]
+\begin{figure}[ht]
 \centering
 \includegraphics[width=0.45\textwidth]{../imagenes/dropwave}
 \includegraphics[width=0.45\textwidth]{../imagenes/griewank}
@@ -261,18 +261,49 @@ En el artículo se sugiere que el valor de $\xi_{1}$ se puede incrementar hasta 
 Además hemos para cada problema el algoritmo se ha repetido 25 veces y se ha tomado una población inicial aleatoria de 1000 individuos. 
 
 \section{Resultados y Conclusiones}
-Lorem Lipsum.
+En la siguiente tabla se muestran los resultados obtenidos para los distintos problemas, incluyendo el tiempo de ejecución.
 
 \[\arraycolsep=7pt\def\arraystretch{1.4}
 \begin{array}{|c|c|c|c|c|}
 \hline
 \text{\textbf{Problema}} & \text{\textbf{Mejor F.Obj.}} & \text{\textbf{Error}} & \text{\textbf{Mediana F.Obj.}} & \text{\textbf{Tiempo 25 ejec.}} \\ \hline
-\text{Ackley} & 0 & 0 & 0.020933 & 71.342s \\ \hline
+\text{Ackley} & 0.0 & 0 & 0.020933 & 71.342 \\ \hline
 \text{CrossInTray} & -2.062612 & 0 & -2.062612 & 60.682 \\ \hline
+\text{Drop-Wave} & -1.0 & 0 & -0.936245 & 59.009 \\ \hline
+\text{Griewank} & 0.0 & 0 & 1e-0.6 & 123.424 \\ \hline
+\text{Bohachevsky3} & 0.0 & 0 & 2.11502 & 57.581 \\ \hline
+\text{Matyas} & 0.0 & 0 & 0.000102 & 56.372 \\ \hline
+\text{Zakharov} & 0.0 & 0 & 5.9e-5 & 70.644 \\ \hline
+\text{Rosenbrock (1)} & 0.0 & 0 & 1.689961 & 70.063 \\ \hline
+\text{Rosenbrock (2)} & 0.0 & 0 & 0.0 & 62.868 \\ \hline
+\text{Michalewcz (2D)} & -1.716269 & 0 & -0.540872 & 73.296 \\ \hline
+\text{Easom} & -0.998611 & 0 & -0.005659 & 62.741 \\ \hline
 \end{array}\]
 
-Acabar Tabla \\
-Justificar que la mediana es mejor que la media: si sale un resultado que explota por una mala inicialización jode la media muchisimo.
+Acabar Tabla
+
+\subsection{Mediana vs.\ media}
+En los resultados mostrados al comienzo de esta sección se utiliza la mediana en lugar de la media. Para explicar esta elección, veamos como ejemplo un extracto de las ejecuciones sobre la función Ackley:
+\begin{table}[hb]
+\centering
+\begin{tabular}{cc}
+    Num.\ ejecución & Función objetivo\\\toprule
+    15&0.000000\\
+    16&0.000141\\
+    17&16.46224\\
+    18&0.095270\\
+    19&0.000000\\
+\end{tabular}
+\end{table}
+
+De forma intuitiva descartamos la ``explosión'' de la ejecución número 17, ya que es dos órdenes de magnitud mayor que el resto. Este efecto es aún más notable cuando, de las 25 ejecuciones, solo hay dos con un fitness mayor a 0.1. Estas explosiones son comunes al optimizar las funciones benchmark, que están diseñadas con el objetivo de ofuscar algoritmos de optimización.
+
+Las explosiones hacen de la media una herramienta inútil. Siguiendo con las 5 ejecuciones del ejemplo, al hacer la media obtenemos que es $\approx 5.3$, esencialmente una quinta parte de la ejecución 17. La mediana, por otra parte, tiene un valor de 0.000141, mucho más acorde a los resultados. En resumen: la mediana nos permite filtrar las explosiones mientras que en la media contamina todas las medidas.
+
+\subsection{Conclusiones}
+Si miramos los valores de la mediana veremos que para la mayoría de los problemas está bastante cercana al mínimo de su problema, con varias excepciones como el Bohachevsky o el Michalewez.
+
+Si atendemos a los valores de la mejor función objetivo, veremos que todos los valores están a menos de una décima de distancia y la mayoría tienen el valor de la función en el mínimo (precisión de 6 decimales). Esto es un muy buen resultado, ya que nos indica que el algoritmo es capaz de llegar al mínimo de la función. Es muy probable que, adaptando el algoritmo (p.e.\ modificando las $\xi_i$), el algoritmo encontrase el mínimo absoluto, mejorando consecuentemente la mediana.
 
 \vspace{5cm}
 
